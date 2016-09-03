@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Device Information</string>
+    <string name="activity_home">Home</string>
+    <string name="activity_about">About</string>
 </resources>
