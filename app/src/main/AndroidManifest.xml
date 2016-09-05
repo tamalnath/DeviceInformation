@@ -4,14 +4,12 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/activity_home"
-        android:supportsRtl="true"
         android:fullBackupContent="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".MainActivity"
-            android:icon="@drawable/ic_home">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,11 +17,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AboutActivity"
-            android:icon="@drawable/ic_info"
-            android:label="@string/activity_about">
-
-        </activity>
+            android:name=".SensorActivity"
+            android:label="@string/activity_sensor"></activity>
+        <activity android:name=".SensorDetailActivity"></activity>
     </application>
 
 </manifest>

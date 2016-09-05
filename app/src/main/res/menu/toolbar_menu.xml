@@ -10,8 +10,8 @@
 
     <item
         android:id="@+id/action_about"
-        android:icon="@drawable/ic_info"
-        android:title="@string/activity_about"
+        android:icon="@drawable/ic_sensor"
+        android:title="@string/activity_sensor"
         app:showAsAction="ifRoom"/>
 
 </menu>
