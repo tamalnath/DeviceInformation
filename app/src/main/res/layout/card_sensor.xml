@@ -23,14 +23,12 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
 
-        <ImageView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="Sensor Type"
             android:id="@+id/sensorType"
-            android:src="@drawable/ic_sensor"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true" />
+            android:layout_below="@id/sensorName" />
 
     </RelativeLayout>
 

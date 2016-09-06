@@ -1,5 +1,36 @@
 <resources>
     <string name="app_name">Device Information</string>
+
+    <string name="loading">Loading&#8230;</string>
+
     <string name="activity_home">Home</string>
+
     <string name="activity_sensor">Sensor</string>
+    <string name="sensor_type_unknown">Unknown</string>
+
+    <string name="activity_sensor_details">Sensor Details</string>
+    <string name="sensor_id">ID</string>
+    <string name="sensor_name">Name</string>
+    <string name="sensor_type_id">Type ID</string>
+    <string name="sensor_type">Type</string>
+    <string name="sensor_vendor">Vendor</string>
+    <string name="sensor_version">Version</string>
+    <string name="sensor_type_internal">Internal Type</string>
+    <string name="sensor_power">Power</string>
+    <string name="sensor_power_unit">%1$f mA</string>
+    <string name="sensor_min_delay">Minimum Delay</string>
+    <string name="sensor_max_delay">Maximum Delay</string>
+    <string name="sensor_delay_unit">%1$d ms</string>
+    <string name="sensor_resolution">Resolution</string>
+    <string name="sensor_max_range">Maximum Range</string>
+    <string name="sensor_reserved_event">Reserved Events</string>
+    <string name="sensor_max_event">Maximum Events</string>
+    <string name="sensor_event_unit">%1$d/sec</string>
+    <string name="sensor_dynamic">Is Dynamic</string>
+    <string name="sensor_wake_up">Is Wake Up</string>
+    <string name="sensor_additional_info">Additional Information</string>
+    <string name="sensor_accuracy">Accuracy</string>
+    <string name="sensor_timestamp">Delay</string>
+    <string name="sensor_values">Sensor Values</string>
+
 </resources>

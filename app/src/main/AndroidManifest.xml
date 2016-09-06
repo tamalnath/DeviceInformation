@@ -18,8 +18,14 @@
         </activity>
         <activity
             android:name=".SensorActivity"
-            android:label="@string/activity_sensor"></activity>
-        <activity android:name=".SensorDetailActivity"></activity>
+            android:label="@string/activity_sensor">
+
+        </activity>
+        <activity
+            android:name=".SensorDetailActivity"
+            android:label="@string/activity_sensor_details">
+
+        </activity>
     </application>
 
 </manifest>
