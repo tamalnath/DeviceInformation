@@ -10,9 +10,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 public class SensorDetailActivity extends BaseActivity implements SensorEventListener {
 
@@ -20,8 +20,10 @@ public class SensorDetailActivity extends BaseActivity implements SensorEventLis
     private Sensor sensor;
     private TextView accuracyView;
     private TextView timestampView;
-    private TextView valuesView;
+    private TextView valueView;
+    private TextView valueLikeView;
     private long timestamp;
+    private TextView valuesView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +32,8 @@ public class SensorDetailActivity extends BaseActivity implements SensorEventLis
         accuracyView = (TextView) findViewById(R.id.accuracy);
         timestampView = (TextView) findViewById(R.id.timestamp);
         valuesView = (TextView) findViewById(R.id.values);
+        valueView = (TextView) findViewById(R.id.value);
+        valueLikeView = (TextView) findViewById(R.id.value_like);
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         List<Sensor> sensorList = sensorManager.getSensorList(Sensor.TYPE_ALL);
         String sensorName = getIntent().getStringExtra("sensorName");
@@ -130,16 +134,103 @@ public class SensorDetailActivity extends BaseActivity implements SensorEventLis
     }
 
     @Override
-    public void onSensorChanged(SensorEvent sensorEvent) {
-        accuracyView.setText(String.valueOf(sensorEvent.accuracy));
-        long delay = (sensorEvent.timestamp - timestamp) / 1_000_000;
-        timestampView.setText(getString(R.string.sensor_delay_unit, delay));
-        timestamp = sensorEvent.timestamp;
-        valuesView.setText(Arrays.toString(sensorEvent.values));
+    public void onSensorChanged(SensorEvent event) {
+        accuracyView.setText(String.valueOf(event.accuracy));
+        long delayMs = (event.timestamp - timestamp) / 1_000_000;
+        timestampView.setText(getString(R.string.sensor_delay_unit, delayMs));
+        timestamp = event.timestamp;
+        String value = null;
+        String values = null;
+        String valueLike = null;
+        float magnitude, x, y, z;
+        switch (event.sensor.getType()) {
+            case Sensor.TYPE_ACCELEROMETER:
+            case Sensor.TYPE_LINEAR_ACCELERATION:
+            case Sensor.TYPE_GRAVITY:
+                x = event.values[0];
+                y = event.values[1];
+                z = event.values[2];
+                magnitude = (float) Math.sqrt(x * x + y * y + z * z);
+                values = getString(R.string.sensor_values_ms2, x, y, z);
+                value = getString(R.string.sensor_value_ms2, magnitude);
+                valueLike = findNearest("GRAVITY_", magnitude);
+                break;
+            case Sensor.TYPE_MAGNETIC_FIELD:
+            case Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED:
+                x = event.values[0];
+                y = event.values[1];
+                z = event.values[2];
+                magnitude = (float) Math.sqrt(x * x + y * y + z * z);
+                values = getString(R.string.sensor_values_ut, x, y, z);
+                value = getString(R.string.sensor_value_ut, magnitude);
+                valueLike = findNearest("MAGNETIC_FIELD_", magnitude);
+                break;
+            case Sensor.TYPE_PROXIMITY:
+                if (event.values[0] == 0) {
+                    value = getString(R.string.sensor_value_near);
+                } else if (event.values[0] == sensor.getMaximumRange()) {
+                    value = getString(R.string.sensor_value_far);
+                } else {
+                    value = getString(R.string.sensor_value_cm, event.values[0]);
+                }
+                break;
+            case Sensor.TYPE_LIGHT:
+                value = getString(R.string.sensor_value_lux, event.values[0]);
+                valueLike = findNearest("LIGHT_", event.values[0]);
+                break;
+            case Sensor.TYPE_GYROSCOPE:
+            case Sensor.TYPE_GYROSCOPE_UNCALIBRATED:
+            case Sensor.TYPE_ORIENTATION:
+                z = event.values[0];
+                x = event.values[1];
+                y = event.values[2];
+                value = getString(R.string.sensor_values_degree, x, y, z);
+                break;
+        }
+        if (value == null) {
+            valueView.setVisibility(View.GONE);
+            findViewById(R.id.value_label).setVisibility(View.GONE);
+        } else {
+            valueView.setText(value);
+        }
+        if (values == null) {
+            StringBuilder sb = new StringBuilder();
+            for (float val : event.values) {
+                sb.append(String.format(Locale.getDefault(), ",%1$.2f", val));
+            }
+            sb.replace(0, 1, "(").append(')');
+            values = sb.toString();
+        }
+        valuesView.setText(values);
+        if (valueLike == null) {
+            valueLikeView.setVisibility(View.GONE);
+            findViewById(R.id.value_like_label).setVisibility(View.GONE);
+        } else {
+            valueLikeView.setText(valueLike);
+        }
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         accuracyView.setText(String.valueOf(accuracy));
+    }
+
+    private static String findNearest(String prefix, float value) {
+        Map<String, Float> map = Utils.findConstants(SensorManager.class, float.class, prefix + ".*");
+        float absValue = Math.abs(value);
+        String name = null;
+        float minDelta = Float.MAX_VALUE;
+        for (Map.Entry<String, Float> entry : map.entrySet()) {
+            float delta = Math.abs(entry.getValue() - absValue);
+            if (delta < minDelta) {
+                minDelta = delta;
+                name = entry.getKey();
+            }
+        }
+        if (name == null) {
+            return null;
+        }
+        name = name.substring(prefix.length());
+        return name;
     }
 }

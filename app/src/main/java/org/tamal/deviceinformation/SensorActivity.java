@@ -12,31 +12,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 public class SensorActivity extends BaseActivity {
 
-    private static Map<Integer, String> sensorTypeMap = new TreeMap<>();
-    static {
-        for (Field field : Sensor.class.getDeclaredFields()) {
-            try {
-                if (int.class == field.getType()
-                        && field.getName().startsWith("TYPE_")) {
-                    sensorTypeMap.put(field.getInt(null), field.getName().substring(5));
-                }
-            } catch (IllegalAccessException e) {
-                //
-            }
-        }
-    }
+    private Map<String, Integer> sensorTypeMap = Utils.findConstants(Sensor.class, int.class, "TYPE_.*");
 
     private List<Sensor> sensors;
+    private String unknown;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,17 +31,12 @@ public class SensorActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         sensors = new ArrayList<>(sensorManager.getSensorList(Sensor.TYPE_ALL));
+        unknown = getString(R.string.sensor_type_unknown);
         Collections.sort(sensors, new Comparator<Sensor>() {
             @Override
             public int compare(Sensor s1, Sensor s2) {
-                String t1 = sensorTypeMap.get(s1.getType());
-                String t2 = sensorTypeMap.get(s2.getType());
-                if (t1 == null) {
-                    return 1;
-                }
-                if (t2 == null) {
-                    return -1;
-                }
+                String t1 = Utils.findKey(sensorTypeMap, s1.getType(), unknown);
+                String t2 = Utils.findKey(sensorTypeMap, s2.getType(), unknown);
                 return t1.compareTo(t2);
             }
         });
@@ -78,11 +60,7 @@ public class SensorActivity extends BaseActivity {
         public void onBindViewHolder(SensorHolder holder, int position) {
             Sensor sensor = sensors.get(position);
             holder.sensorName.setText(sensor.getName());
-            int typeId = sensor.getType();
-            String type = sensorTypeMap.get(typeId);
-            if (type == null) {
-                type = getString(R.string.sensor_type_unknown);
-            }
+            String type = Utils.findKey(sensorTypeMap, sensor.getType(), unknown);
             holder.sensorType.setText(type);
         }
 

@@ -31,6 +31,17 @@
     <string name="sensor_additional_info">Additional Information</string>
     <string name="sensor_accuracy">Accuracy</string>
     <string name="sensor_timestamp">Delay</string>
-    <string name="sensor_values">Sensor Values</string>
+    <string name="sensor_values">Values</string>
+    <string name="sensor_value">Value</string>
+    <string name="sensor_value_like">Feels like</string>
+    <string name="sensor_value_ms2">%1$ .2f m/s&#178;</string>
+    <string name="sensor_values_ms2">x=%1$ .2f, y=%2$ .2f, z=%3$ .2f m/s&#178;</string>
+    <string name="sensor_value_ut">%1$ .2f &#181;T</string>
+    <string name="sensor_values_ut">x=%1$ .2f, y=%2$ .2f, z=%3$ .2f &#181;T</string>
+    <string name="sensor_value_lux">%1$.2f lx</string>
+    <string name="sensor_value_near">near</string>
+    <string name="sensor_value_far">far</string>
+    <string name="sensor_value_cm">%1$.2f cm</string>
+    <string name="sensor_values_degree">x=%1$ .0f&#176;, y=%2$ .0f&#176;, z=%3$ .0f&#176;</string>
 
 </resources>
