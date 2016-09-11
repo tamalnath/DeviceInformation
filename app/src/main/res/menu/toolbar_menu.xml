@@ -9,7 +9,7 @@
         app:showAsAction="ifRoom"/>
 
     <item
-        android:id="@+id/action_about"
+        android:id="@+id/action_sensor"
         android:icon="@drawable/ic_sensor"
         android:title="@string/activity_sensor"
         app:showAsAction="ifRoom"/>

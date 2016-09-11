@@ -23,8 +23,8 @@ abstract class BaseActivity extends AppCompatActivity {
         if (this instanceof MainActivity) {
             item = menu.findItem(R.id.action_home);
         }
-        if (this instanceof SensorActivity) {
-            item = menu.findItem(R.id.action_about);
+        if (this instanceof SensorActivity || this instanceof SensorDetailActivity) {
+            item = menu.findItem(R.id.action_sensor);
         }
         if (item != null) {
             item.setVisible(false);
@@ -38,7 +38,7 @@ abstract class BaseActivity extends AppCompatActivity {
             case R.id.action_home:
                 startActivity(new Intent(this, MainActivity.class));
                 break;
-            case R.id.action_about:
+            case R.id.action_sensor:
                 startActivity(new Intent(this, SensorActivity.class));
                 break;
             default:

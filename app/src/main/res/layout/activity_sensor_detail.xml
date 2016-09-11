@@ -244,7 +244,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/sensor_values" />
+                android:text="@string/sensor_values"
+                android:id="@+id/values_label" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -275,6 +276,17 @@
                 android:layout_height="wrap_content"
                 android:text="@string/loading"
                 android:id="@+id/value_like" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sensor_value_raw" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/loading"
+                android:id="@+id/value_raw" />
 
         </GridLayout>
 
