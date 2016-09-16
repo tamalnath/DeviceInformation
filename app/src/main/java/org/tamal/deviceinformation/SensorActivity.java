@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,10 +21,10 @@ import java.util.Map;
 
 public class SensorActivity extends BaseActivity {
 
-    private Map<String, Integer> sensorTypeMap = Utils.findConstants(Sensor.class, int.class, "TYPE_.*");
+    private static final Map<Integer, String> sensorTypeMap = Utils.reverseMap(Utils.findConstants(Sensor.class, int.class, "TYPE_.*"));
+    private static String unknown;
 
     private List<Sensor> sensors;
-    private String unknown;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +36,8 @@ public class SensorActivity extends BaseActivity {
         Collections.sort(sensors, new Comparator<Sensor>() {
             @Override
             public int compare(Sensor s1, Sensor s2) {
-                String t1 = Utils.findKey(sensorTypeMap, s1.getType(), unknown);
-                String t2 = Utils.findKey(sensorTypeMap, s2.getType(), unknown);
+                String t1 = Utils.getOrDefault(sensorTypeMap, s1.getType(), unknown);
+                String t2 = Utils.getOrDefault(sensorTypeMap, s2.getType(), unknown);
                 return t1.compareTo(t2);
             }
         });
@@ -45,6 +46,39 @@ public class SensorActivity extends BaseActivity {
         sensorView.setLayoutManager(new LinearLayoutManager(this));
         SensorAdapter sensorAdapter = new SensorAdapter();
         sensorView.setAdapter(sensorAdapter);
+    }
+
+    private static class SensorHolder extends RecyclerView.ViewHolder {
+
+        private Sensor sensor;
+        private TextView sensorName;
+        private TextView sensorType;
+
+        public SensorHolder(View itemView) {
+            super(itemView);
+            sensorName = (TextView) itemView.findViewById(R.id.sensorName);
+            sensorType = (TextView) itemView.findViewById(R.id.sensorType);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(view.getContext(), SensorDetailActivity.class);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        intent.putExtra("sensorId", String.valueOf(sensor.getId()));
+                    } else {
+                        intent.putExtra("sensorId", sensor.getName() + sensor.getType() + sensor.getVendor() + sensor.getVersion());
+                    }
+                    intent.putExtra("sensorType", sensorType.getText());
+                    view.getContext().startActivity(intent);
+                }
+            });
+        }
+
+        public void update(Sensor sensor) {
+            this.sensor = sensor;
+            sensorName.setText(sensor.getName());
+            String type = Utils.getOrDefault(sensorTypeMap, sensor.getType(), unknown);
+            sensorType.setText(type);
+        }
     }
 
     private class SensorAdapter extends RecyclerView.Adapter<SensorHolder> {
@@ -58,38 +92,13 @@ public class SensorActivity extends BaseActivity {
 
         @Override
         public void onBindViewHolder(SensorHolder holder, int position) {
-            Sensor sensor = sensors.get(position);
-            holder.sensorName.setText(sensor.getName());
-            String type = Utils.findKey(sensorTypeMap, sensor.getType(), unknown);
-            holder.sensorType.setText(type);
+            holder.update(sensors.get(position));
         }
 
         @Override
         public int getItemCount() {
             return sensors.size();
         }
-    }
-
-    private static class SensorHolder extends RecyclerView.ViewHolder {
-
-        private TextView sensorName;
-        private TextView sensorType;
-
-        public SensorHolder(View itemView) {
-            super(itemView);
-            sensorName = (TextView) itemView.findViewById(R.id.sensorName);
-            sensorType = (TextView) itemView.findViewById(R.id.sensorType);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(view.getContext(), SensorDetailActivity.class);
-                    intent.putExtra("sensorName", sensorName.getText());
-                    intent.putExtra("sensorType", sensorType.getText());
-                    view.getContext().startActivity(intent);
-                }
-            });
-        }
-
     }
 
 }

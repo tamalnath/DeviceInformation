@@ -5,9 +5,7 @@ import android.support.annotation.Nullable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 public final class Utils {
     private Utils() {
@@ -35,26 +33,18 @@ public final class Utils {
         return map;
     }
 
-    public static <K, V> Set<K> findKeys(Map<K, V> map, V value) {
-        Set<K> keys = new HashSet<>();
-        for(Map.Entry<K, V> entry : map.entrySet()) {
-            if (value == null) {
-                if (entry.getValue() == null) {
-                    keys.add(entry.getKey());
-                }
-            } else {
-                if (value.equals(entry.getValue())) {
-                    keys.add(entry.getKey());
-                }
-            }
+    public static <K, V> Map<V, K> reverseMap(Map<K, V> map) {
+        Map<V, K> reverse = new HashMap<>(map.size());
+        for (Map.Entry<K, V> entry : map.entrySet()) {
+            reverse.put(entry.getValue(), entry.getKey());
         }
-        return keys;
+        return reverse;
     }
 
-    public static <K, V> K findKey(Map<K, V> map, V value, K defaultKey) {
-        for (K key : findKeys(map, value)) {
-            return key;
+    public static <K, V> V getOrDefault(Map<K, V> map, K key, V defaultValue) {
+        if (map.containsKey(key)) {
+            return map.get(key);
         }
-        return defaultKey;
+        return defaultValue;
     }
 }

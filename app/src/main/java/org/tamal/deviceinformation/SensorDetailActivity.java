@@ -30,6 +30,25 @@ public class SensorDetailActivity extends BaseActivity implements SensorEventLis
     private long timestamp;
     private String unit;
 
+    private static String findNearest(String prefix, float value) {
+        Map<String, Float> map = Utils.findConstants(SensorManager.class, float.class, prefix + ".*");
+        float absValue = Math.abs(value);
+        String name = null;
+        float minDelta = Float.MAX_VALUE;
+        for (Map.Entry<String, Float> entry : map.entrySet()) {
+            float delta = Math.abs(entry.getValue() - absValue);
+            if (delta < minDelta) {
+                minDelta = delta;
+                name = entry.getKey();
+            }
+        }
+        if (name == null) {
+            return null;
+        }
+        name = name.substring(prefix.length());
+        return name;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_sensor_detail);
@@ -45,12 +64,23 @@ public class SensorDetailActivity extends BaseActivity implements SensorEventLis
         rawValueView = (TextView) findViewById(R.id.value_raw);
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         List<Sensor> sensorList = sensorManager.getSensorList(Sensor.TYPE_ALL);
-        String sensorName = getIntent().getStringExtra("sensorName");
+        String sensorId = getIntent().getStringExtra("sensorId");
         String sensorType = getIntent().getStringExtra("sensorType");
-        for (Sensor sensorItem : sensorList) {
-            if (sensorItem.getName().equals(sensorName)) {
-                sensor = sensorItem;
-                break;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            int id = Integer.valueOf(sensorId);
+            for (Sensor item : sensorList) {
+                if (id == item.getId()) {
+                    sensor = item;
+                    break;
+                }
+            }
+        } else {
+            for (Sensor item : sensorList) {
+                String id = item.getName() + item.getType() + item.getVendor() + item.getVersion();
+                if (id.equals(sensorId)) {
+                    sensor = item;
+                    break;
+                }
             }
         }
         unit = getUnit(sensor.getType());
@@ -63,7 +93,7 @@ public class SensorDetailActivity extends BaseActivity implements SensorEventLis
             findViewById(R.id.id_label).setVisibility(View.GONE);
         }
         view = (TextView) findViewById(R.id.name);
-        view.setText(sensorName);
+        view.setText(sensor.getName());
         view = (TextView) findViewById(R.id.type);
         view.setText(sensorType);
         view = (TextView) findViewById(R.id.type_id);
@@ -257,25 +287,6 @@ public class SensorDetailActivity extends BaseActivity implements SensorEventLis
                 return getString(R.string.sensor_unit_percent);
         }
         return "";
-    }
-
-    private static String findNearest(String prefix, float value) {
-        Map<String, Float> map = Utils.findConstants(SensorManager.class, float.class, prefix + ".*");
-        float absValue = Math.abs(value);
-        String name = null;
-        float minDelta = Float.MAX_VALUE;
-        for (Map.Entry<String, Float> entry : map.entrySet()) {
-            float delta = Math.abs(entry.getValue() - absValue);
-            if (delta < minDelta) {
-                minDelta = delta;
-                name = entry.getKey();
-            }
-        }
-        if (name == null) {
-            return null;
-        }
-        name = name.substring(prefix.length());
-        return name;
     }
 
 }
