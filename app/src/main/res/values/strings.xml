@@ -3,7 +3,12 @@
 
     <string name="loading">Loading&#8230;</string>
 
-    <string name="activity_home">Home</string>
+    <string name="activity_main">Home</string>
+    <string name="build_information">Build Information</string>
+    <string name="environment_variables">Environment Variables</string>
+    <string name="system_properties">System Properties</string>
+
+    <string name="activity_show_data_helper">Show Data</string>
 
     <string name="activity_sensor">Sensor</string>
     <string name="sensor_type_unknown">Unknown</string>

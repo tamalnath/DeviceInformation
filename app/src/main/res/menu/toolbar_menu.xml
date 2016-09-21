@@ -5,7 +5,7 @@
     <item
         android:id="@+id/action_home"
         android:icon="@drawable/ic_home"
-        android:title="@string/activity_home"
+        android:title="@string/activity_main"
         app:showAsAction="ifRoom"/>
 
     <item

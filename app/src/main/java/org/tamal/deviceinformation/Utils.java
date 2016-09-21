@@ -2,8 +2,10 @@ package org.tamal.deviceinformation;
 
 import android.support.annotation.Nullable;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,12 +16,13 @@ public final class Utils {
     public static <T> Map<String, T> findConstants(Class<?> classType, @Nullable Class<T> fieldType, @Nullable String regex) {
         Map<String, T> map = new HashMap<>();
         for (Field field : classType.getDeclaredFields()) {
+            boolean isPublic = Modifier.isPublic(field.getModifiers());
             boolean isStatic = Modifier.isStatic(field.getModifiers());
             boolean isFinal = Modifier.isFinal(field.getModifiers());
-            if (!isStatic || !isFinal) {
+            if (!isPublic || !isStatic || !isFinal) {
                 continue;
             }
-            if (field.getType() != fieldType) {
+            if (fieldType != null && field.getType() != fieldType) {
                 continue;
             }
             if (regex == null || field.getName().matches(regex)) {
@@ -46,5 +49,59 @@ public final class Utils {
             return map.get(key);
         }
         return defaultValue;
+    }
+
+    public static String toString(Object obj) {
+        if (obj == null) {
+            return "null";
+        }
+        final String separator = ",";
+        if (obj.getClass().isArray()) {
+            int length = Array.getLength(obj);
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < length; i++) {
+                String val = toString(Array.get(obj, i));
+                sb.append(separator).append(val);
+            }
+            if (sb.length() == 0) {
+                sb.insert(0, "[");
+            } else {
+                sb.replace(0, separator.length(), "[");
+            }
+            sb.append("]");
+            return sb.toString();
+        }
+        if (obj instanceof Collection) {
+            Collection<?> collection = (Collection<?>) obj;
+            StringBuilder sb = new StringBuilder();
+            for (Object item : collection) {
+                String val = toString(item);
+                sb.append(separator).append(val);
+            }
+            if (sb.length() == 0) {
+                sb.insert(0, "[");
+            } else {
+                sb.replace(0, separator.length(), "[");
+            }
+            sb.append("]");
+            return sb.toString();
+        }
+        if (obj instanceof Map) {
+            Map<?, ?> map = (Map<?, ?>) obj;
+            StringBuilder sb = new StringBuilder();
+            for (Map.Entry<?, ?> entry : map.entrySet()) {
+                String key = toString(entry.getKey());
+                String value = toString(entry.getValue());
+                sb.append(separator).append(key).append(":").append(value);
+            }
+            if (sb.length() == 0) {
+                sb.insert(0, "[");
+            } else {
+                sb.replace(0, separator.length(), "[");
+            }
+            sb.append("]");
+            return sb.toString();
+        }
+        return String.valueOf(obj);
     }
 }
