@@ -23,7 +23,7 @@ abstract class BaseActivity extends AppCompatActivity {
         if (this instanceof MainActivity) {
             item = menu.findItem(R.id.action_home);
         }
-        if (this instanceof SensorActivity || this instanceof SensorDetailActivity) {
+        if (this instanceof SensorListActivity || this instanceof SensorDetailActivity) {
             item = menu.findItem(R.id.action_sensor);
         }
         if (item != null) {
@@ -39,7 +39,7 @@ abstract class BaseActivity extends AppCompatActivity {
                 startActivity(new Intent(this, MainActivity.class));
                 break;
             case R.id.action_sensor:
-                startActivity(new Intent(this, SensorActivity.class));
+                startActivity(new Intent(this, SensorListActivity.class));
                 break;
             default:
                 return super.onOptionsItemSelected(item);

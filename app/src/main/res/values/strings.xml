@@ -10,10 +10,10 @@
 
     <string name="activity_show_data_helper">Show Data</string>
 
-    <string name="activity_sensor">Sensor</string>
-    <string name="sensor_type_unknown">Unknown</string>
+    <string name="activity_sensor">Sensors</string>
 
     <string name="activity_sensor_details">Sensor Details</string>
+    <string name="sensor_type_unknown">Unknown (%1$d)</string>
     <string name="sensor_id">ID</string>
     <string name="sensor_name">Name</string>
     <string name="sensor_type_id">Type ID</string>

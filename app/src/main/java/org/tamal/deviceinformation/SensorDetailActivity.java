@@ -16,6 +16,8 @@ import java.util.Map;
 
 public class SensorDetailActivity extends BaseActivity implements SensorEventListener {
 
+    private static final Map<Integer, String> sensorTypeMap = Utils.reverseMap(Utils.findConstants(Sensor.class, int.class, "TYPE_.*"));
+
     private SensorManager sensorManager;
     private Sensor sensor;
     private TextView accuracyView;
@@ -65,7 +67,6 @@ public class SensorDetailActivity extends BaseActivity implements SensorEventLis
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         List<Sensor> sensorList = sensorManager.getSensorList(Sensor.TYPE_ALL);
         String sensorId = getIntent().getStringExtra("sensorId");
-        String sensorType = getIntent().getStringExtra("sensorType");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             int id = Integer.valueOf(sensorId);
             for (Sensor item : sensorList) {
@@ -83,6 +84,8 @@ public class SensorDetailActivity extends BaseActivity implements SensorEventLis
                 }
             }
         }
+        String unknown = getString(R.string.sensor_type_unknown, sensor.getType());
+        String sensorType = Utils.getOrDefault(sensorTypeMap, sensor.getType(), unknown);
         unit = getUnit(sensor.getType());
         TextView view;
         view = (TextView) findViewById(R.id.id);

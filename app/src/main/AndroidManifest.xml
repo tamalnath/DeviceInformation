@@ -17,12 +17,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SensorActivity"
+            android:name=".SensorListActivity"
             android:label="@string/activity_sensor" />
         <activity
             android:name=".SensorDetailActivity"
             android:label="@string/activity_sensor_details"
-            android:parentActivityName=".SensorActivity" />
+            android:parentActivityName=".SensorListActivity" />
         <activity
             android:name=".ShowDataHelperActivity"
             android:label="@string/activity_show_data_helper" />
