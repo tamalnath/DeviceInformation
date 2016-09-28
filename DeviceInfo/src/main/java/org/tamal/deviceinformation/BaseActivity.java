@@ -9,10 +9,9 @@ import android.view.MenuItem;
 
 abstract class BaseActivity extends AppCompatActivity {
 
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.app_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
     }
 
@@ -21,10 +20,7 @@ abstract class BaseActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
         MenuItem item = null;
         if (this instanceof MainActivity) {
-            item = menu.findItem(R.id.action_home);
-        }
-        if (this instanceof SensorListActivity || this instanceof SensorDetailActivity) {
-            item = menu.findItem(R.id.action_sensor);
+            item = menu.findItem(R.id.action_main);
         }
         if (item != null) {
             item.setVisible(false);
@@ -35,11 +31,8 @@ abstract class BaseActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_home:
+            case R.id.action_main:
                 startActivity(new Intent(this, MainActivity.class));
-                break;
-            case R.id.action_sensor:
-                startActivity(new Intent(this, SensorListActivity.class));
                 break;
             default:
                 return super.onOptionsItemSelected(item);

@@ -12,20 +12,9 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".SensorListActivity"
-            android:label="@string/activity_sensor" />
-        <activity
-            android:name=".SensorDetailActivity"
-            android:label="@string/activity_sensor_details"
-            android:parentActivityName=".SensorListActivity" />
-        <activity
-            android:name=".ShowDataHelperActivity"
-            android:label="@string/activity_show_data_helper" />
     </application>
 
 </manifest>

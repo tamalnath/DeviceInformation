@@ -5,7 +5,7 @@ android {
         config {
             keyAlias 'mykey'
             keyPassword 'password'
-            storeFile file('C:/Users/tnath/.android/keystore.p12')
+            storeFile file('C:/Users/tnath/.android/android.jks')
             storePassword 'password'
         }
     }
@@ -33,6 +33,7 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:24.2.1'
+    compile 'com.android.support:support-v4:24.2.1'
+    testCompile 'junit:junit:4.12'
 }

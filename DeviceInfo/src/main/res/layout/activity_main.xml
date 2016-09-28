@@ -1,48 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="org.tamal.deviceinformation.MainActivity">
+    android:gravity="center"
+    android:orientation="vertical">
 
     <include
-        layout="@layout/app_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        layout="@layout/toolbar" />
 
-    <ScrollView
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/scrollView"
-        android:layout_gravity="center_horizontal">
+        android:layout_height="match_parent">
 
-        <LinearLayout
+        <android.support.v4.view.PagerTabStrip
+            android:id="@+id/pager_title_strip"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_gravity="top"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp" />
 
-            <Button
-                android:text="@string/build_information"
-                android:id="@+id/build_information"
-                android:onClick="showDetails"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+    </android.support.v4.view.ViewPager>
 
-            <Button
-                android:text="@string/environment_variables"
-                android:id="@+id/environment_variables"
-                android:onClick="showDetails"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <Button
-                android:text="@string/system_properties"
-                android:id="@+id/system_properties"
-                android:onClick="showDetails"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
-    </ScrollView>
 </LinearLayout>

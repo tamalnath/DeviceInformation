@@ -1,23 +1,52 @@
 package org.tamal.deviceinformation;
 
-import android.content.Intent;
-import android.os.Build;
+import android.content.res.Resources;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.TextView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 
 public class MainActivity extends BaseActivity {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_main);
         super.onCreate(savedInstanceState);
+
+        PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(), getResources());
+        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager.setAdapter(adapter);
     }
 
-    public void showDetails(View view) {
-        Intent intent = new Intent(view.getContext(), ShowDataHelperActivity.class);
-        intent.putExtra("ref", view.getId());
-        startActivity(intent);
+    private static class PagerAdapter extends FragmentPagerAdapter {
+
+        private Fragment[] fragments = {
+                new GeneralFragment(),
+                new SensorsFragment()
+        };
+
+        private String[] fragmentTitles = new String[fragments.length];
+
+        PagerAdapter(FragmentManager fm, Resources resources) {
+            super(fm);
+            fragmentTitles[0] = resources.getString(R.string.fragment_general);
+            fragmentTitles[1] = resources.getString(R.string.fragment_sensors);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return fragments[position];
+        }
+
+        @Override
+        public int getCount() {
+            return fragments.length;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return fragmentTitles[position];
+        }
     }
 
 }
