@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.File;
@@ -49,24 +50,6 @@ public class BuildFragment extends Fragment {
             TextView valueView = new TextView(getContext());
             valueView.setText(Utils.toString(entry.getValue()));
             propertiesLayout.addView(valueView);
-        }
-        ViewGroup fontsLayout = (ViewGroup) rootView.findViewById(R.id.build_fonts);
-        for (final File fontFile : new File("/system/fonts").listFiles()) {
-            TextView fontView = new TextView(getContext());
-            final String fontName = fontFile.getName().split("\\.")[0];
-            fontView.setText(fontName);
-            fontsLayout.addView(fontView);
-            fontView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    EditText editText = new EditText(getContext());
-                    editText.setTypeface(Typeface.createFromFile(fontFile));
-                    editText.setText(R.string.build_font_try);
-                    editText.setMaxLines(5);
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    builder.setTitle(fontName).setView(editText).show();
-                }
-            });
         }
         return rootView;
     }

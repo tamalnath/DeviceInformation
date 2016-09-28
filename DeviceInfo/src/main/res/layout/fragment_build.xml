@@ -46,22 +46,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" />
 
-        <TextView
-            android:text="@string/build_fonts"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
-
-        <TextView
-            android:text="@string/build_fonts_msg"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <LinearLayout
-            android:id="@+id/build_fonts"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" />
     </LinearLayout>
 
 </ScrollView>
