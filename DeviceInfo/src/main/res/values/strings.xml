@@ -44,4 +44,13 @@
     <string name="sensor_additional_info">Additional Information</string>
     <string name="sensor_accuracy">Accuracy</string>
     <string name="sensor_timestamp">Delay</string>
+
+    <string name="fragment_build">Build</string>
+    <string name="build_build">Build Information</string>
+    <string name="build_environment">Environment Variables</string>
+    <string name="build_properties">System Properties</string>
+    <string name="build_fonts">Fonts</string>
+    <string name="build_fonts_msg">Loading all the fonts at once can slow down the application. Instead, click on individual fonts to see how it looks.</string>
+    <string name="build_font_try">Type Something here</string>
+
 </resources>

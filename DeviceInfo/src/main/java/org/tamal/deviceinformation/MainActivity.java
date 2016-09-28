@@ -22,7 +22,8 @@ public class MainActivity extends BaseActivity {
 
         private Fragment[] fragments = {
                 new GeneralFragment(),
-                new SensorsFragment()
+                new SensorsFragment(),
+                new BuildFragment()
         };
 
         private String[] fragmentTitles = new String[fragments.length];
@@ -31,6 +32,7 @@ public class MainActivity extends BaseActivity {
             super(fm);
             fragmentTitles[0] = resources.getString(R.string.fragment_general);
             fragmentTitles[1] = resources.getString(R.string.fragment_sensors);
+            fragmentTitles[2] = resources.getString(R.string.fragment_build);
         }
 
         @Override
