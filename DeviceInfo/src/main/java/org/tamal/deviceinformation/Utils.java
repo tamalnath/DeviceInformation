@@ -52,10 +52,25 @@ public final class Utils {
     }
 
     public static String toString(Object obj) {
+        return toString(obj, null, null, null, null);
+    }
+
+    public static String toString(Object obj, String separator, String start, String end, String keyValSep) {
         if (obj == null) {
             return "null";
         }
-        final String separator = ",";
+        if (separator == null) {
+            separator = ", ";
+        }
+        if (start == null) {
+            start = "[";
+        }
+        if (end == null) {
+            end = "]";
+        }
+        if (keyValSep == null) {
+            keyValSep = ":";
+        }
         if (obj.getClass().isArray()) {
             int length = Array.getLength(obj);
             StringBuilder sb = new StringBuilder();
@@ -64,11 +79,11 @@ public final class Utils {
                 sb.append(separator).append(val);
             }
             if (sb.length() == 0) {
-                sb.insert(0, "[");
+                sb.insert(0, start);
             } else {
-                sb.replace(0, separator.length(), "[");
+                sb.replace(0, separator.length(), start);
             }
-            sb.append("]");
+            sb.append(end);
             return sb.toString();
         }
         if (obj instanceof Collection) {
@@ -79,11 +94,11 @@ public final class Utils {
                 sb.append(separator).append(val);
             }
             if (sb.length() == 0) {
-                sb.insert(0, "[");
+                sb.insert(0, start);
             } else {
-                sb.replace(0, separator.length(), "[");
+                sb.replace(0, separator.length(), start);
             }
-            sb.append("]");
+            sb.append(end);
             return sb.toString();
         }
         if (obj instanceof Map) {
@@ -92,16 +107,17 @@ public final class Utils {
             for (Map.Entry<?, ?> entry : map.entrySet()) {
                 String key = toString(entry.getKey());
                 String value = toString(entry.getValue());
-                sb.append(separator).append(key).append(":").append(value);
+                sb.append(separator).append(key).append(keyValSep).append(value);
             }
             if (sb.length() == 0) {
-                sb.insert(0, "[");
+                sb.insert(0, start);
             } else {
-                sb.replace(0, separator.length(), "[");
+                sb.replace(0, separator.length(), start);
             }
-            sb.append("]");
+            sb.append(end);
             return sb.toString();
         }
         return String.valueOf(obj);
     }
+
 }

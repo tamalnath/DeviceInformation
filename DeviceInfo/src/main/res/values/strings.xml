@@ -1,12 +1,44 @@
 <resources>
     <string name="app_name">Device Information</string>
 
-    <string name="na">N/A</string>
+    <string name="unknown">Unknown</string>
     <string name="loading">Loading&#8230;</string>
 
     <string name="activity_main">Home</string>
 
     <string name="fragment_general">General</string>
+    <string name="battery">Battery Details</string>
+    <string name="battery_present">Battery Present</string>
+    <string name="battery_status">Battery Status</string>
+    <string name="battery_health">Battery Health</string>
+    <string name="battery_plugged">Battery Plugged</string>
+    <string name="battery_plugged_unplugged">Not Plugged</string>
+    <string name="battery_charge_level">Battery Charged</string>
+    <string name="battery_voltage">Battery Voltage</string>
+    <string name="battery_temperature">Battery Temperature</string>
+    <string name="battery_technology">Battery Technology</string>
+    <string name="connectivity_active">Active Network</string>
+    <string name="connectivity_default">Default Network</string>
+    <string name="connectivity_state">Connection State</string>
+    <string name="connectivity_extra">Extra Information</string>
+    <string name="connectivity_reason">Connection Failure Reason</string>
+    <string name="connectivity_type">Connection Type</string>
+    <string name="connectivity_available">Connection Available</string>
+    <string name="connectivity_connected">Connected</string>
+    <string name="connectivity_failover">Connectivity Failover</string>
+    <string name="connectivity_roaming">Roaming</string>
+    <string name="connectivity_metered">Network metered</string>
+    <string name="connectivity_dns">DNS Servers</string>
+    <string name="connectivity_domains">Domains</string>
+    <string name="connectivity_interface">Interfaces</string>
+    <string name="connectivity_link">Link Addresses</string>
+    <string name="connectivity_route">Route Information</string>
+    <string name="connectivity_download">Download Speed</string>
+    <string name="connectivity_upload">Upload Speed</string>
+    <string name="connectivity_transport">Transport Types</string>
+    <string name="speed_kbps">%1$d Kbps</string>
+    <string name="active">Active</string>
+    <string name="inactive">Inactive</string>
 
     <string name="fragment_sensors">Sensors</string>
 

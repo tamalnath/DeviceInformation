@@ -3,4 +3,7 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
     </style>
 
+    <style name="Heading" parent="TextAppearance.AppCompat.Display1">
+    </style>
+
 </resources>
