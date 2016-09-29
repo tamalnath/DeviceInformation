@@ -24,10 +24,12 @@ import java.util.Map;
 
 public class SensorsFragment extends Fragment implements SensorEventListener {
 
+    private static final int DELAY_MILLIS = 100;
     private static final Map<Integer, String> sensorTypeMap = Utils.reverseMap(Utils.findConstants(Sensor.class, int.class, "TYPE_.*"));
 
     SensorManager sensorManager;
     List<Sensor> sensors;
+    Map<Sensor, Long> sensorUpdateMap = new HashMap<>();
     Map<Sensor, TextView> sensorValuesMap = new HashMap<>();
 
     @Override
@@ -56,7 +58,7 @@ public class SensorsFragment extends Fragment implements SensorEventListener {
     public void onResume() {
         super.onResume();
         for (Sensor sensor : sensors) {
-            sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+            sensorManager.registerListener(this, sensor, 1000 * DELAY_MILLIS);
         }
     }
 
@@ -71,6 +73,12 @@ public class SensorsFragment extends Fragment implements SensorEventListener {
     @Override
     public void onSensorChanged(SensorEvent event) {
         Sensor sensor = event.sensor;
+        Long lastUpdated = sensorUpdateMap.get(sensor);
+        long now = System.currentTimeMillis();
+        if (lastUpdated != null && now - lastUpdated < DELAY_MILLIS) {
+            return;
+        }
+        sensorUpdateMap.put(sensor, now);
         String unit = getUnit(sensor.getType());
         String value;
         float[] v = event.values;

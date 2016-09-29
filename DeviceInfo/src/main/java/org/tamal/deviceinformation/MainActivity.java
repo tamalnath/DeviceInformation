@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 
@@ -18,12 +19,13 @@ public class MainActivity extends BaseActivity {
         viewPager.setAdapter(adapter);
     }
 
-    private static class PagerAdapter extends FragmentStatePagerAdapter {
+    private static class PagerAdapter extends FragmentPagerAdapter {
 
         private Fragment[] fragments = {
                 new GeneralFragment(),
-                new SensorsFragment(),
                 new BuildFragment(),
+                new NetworkFragment(),
+                new SensorsFragment(),
                 new FontFragment()
         };
 
@@ -32,9 +34,10 @@ public class MainActivity extends BaseActivity {
         PagerAdapter(FragmentManager fm, Resources resources) {
             super(fm);
             fragmentTitles[0] = resources.getString(R.string.fragment_general);
-            fragmentTitles[1] = resources.getString(R.string.fragment_sensors);
-            fragmentTitles[2] = resources.getString(R.string.fragment_build);
-            fragmentTitles[3] = resources.getString(R.string.fragment_fonts);
+            fragmentTitles[1] = resources.getString(R.string.fragment_build);
+            fragmentTitles[2] = resources.getString(R.string.fragment_network);
+            fragmentTitles[3] = resources.getString(R.string.fragment_sensors);
+            fragmentTitles[4] = resources.getString(R.string.fragment_fonts);
         }
 
         @Override

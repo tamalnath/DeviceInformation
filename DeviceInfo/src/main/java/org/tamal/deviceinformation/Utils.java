@@ -1,15 +1,21 @@
 package org.tamal.deviceinformation;
 
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 public final class Utils {
+
+    private static final String TAG = "Utils";
+
     private Utils() {
     }
 
@@ -31,6 +37,36 @@ public final class Utils {
                 } catch (IllegalAccessException e) {
                     throw new RuntimeException(e);
                 }
+            }
+        }
+        return map;
+    }
+
+    public static Map<String, Object> findProperties(Object object) {
+        Map<String, Object> map = new HashMap<>();
+        for (Method method : object.getClass().getMethods()) {
+            boolean isPublic = Modifier.isPublic(method.getModifiers());
+            boolean isStatic = Modifier.isStatic(method.getModifiers());
+            if (!isPublic || isStatic || method.getParameterTypes().length != 0
+                    || Object.class == method.getDeclaringClass()) {
+                continue;
+            }
+            String name = method.getName();
+            if (name.startsWith("is")) {
+                name = name.substring(2);
+            } else if (name.startsWith("get")) {
+                name = name.substring(3);
+            } else {
+                continue;
+            }
+            try {
+                Object value = method.invoke(object);
+                name = Character.toLowerCase(name.charAt(0)) + name.substring(1);
+                map.put(name, value);
+            } catch (IllegalAccessException e) {
+                Log.d(TAG, e.getMessage());
+            } catch (InvocationTargetException e) {
+                Log.e(TAG, e.getMessage());
             }
         }
         return map;

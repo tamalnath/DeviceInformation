@@ -1,0 +1,245 @@
+<ScrollView
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="org.tamal.deviceinformation.NetworkFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:text="@string/connectivity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/Heading" />
+
+        <TextView
+            android:text="@string/connectivity_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="normal|bold" />
+
+        <TextView
+            android:id="@+id/connectivity_type"
+            android:text="@string/unknown"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:text="@string/connectivity_state"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="normal|bold" />
+
+        <TextView
+            android:id="@+id/connectivity_state"
+            android:text="@string/unknown"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:text="@string/connectivity_extra"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="normal|bold" />
+
+        <TextView
+            android:id="@+id/connectivity_extra"
+            android:text="@string/unknown"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:text="@string/connectivity_reason"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="normal|bold" />
+
+        <TextView
+            android:id="@+id/connectivity_reason"
+            android:text="@string/unknown"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:text="@string/connectivity_available"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="normal|bold" />
+
+        <TextView
+            android:id="@+id/connectivity_available"
+            android:text="@string/unknown"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:text="@string/connectivity_connected"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="normal|bold" />
+
+        <TextView
+            android:id="@+id/connectivity_connected"
+            android:text="@string/unknown"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:text="@string/connectivity_failover"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="normal|bold" />
+
+        <TextView
+            android:id="@+id/connectivity_failover"
+            android:text="@string/unknown"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:text="@string/connectivity_roaming"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="normal|bold" />
+
+        <TextView
+            android:id="@+id/connectivity_roaming"
+            android:text="@string/unknown"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:text="@string/connectivity_metered"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="normal|bold" />
+
+        <TextView
+            android:id="@+id/connectivity_metered"
+            android:text="@string/unknown"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:id="@+id/network_lollipop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:text="@string/connectivity_default"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="normal|bold" />
+
+            <TextView
+                android:id="@+id/connectivity_default"
+                android:text="@string/unknown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:text="@string/connectivity_dns"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="normal|bold" />
+
+            <TextView
+                android:id="@+id/connectivity_dns"
+                android:text="@string/unknown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:text="@string/connectivity_domains"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="normal|bold" />
+
+            <TextView
+                android:id="@+id/connectivity_domains"
+                android:text="@string/unknown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:text="@string/connectivity_interface"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="normal|bold" />
+
+            <TextView
+                android:id="@+id/connectivity_interface"
+                android:text="@string/unknown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:text="@string/connectivity_link"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="normal|bold" />
+
+            <TextView
+                android:id="@+id/connectivity_link"
+                android:text="@string/unknown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:text="@string/connectivity_route"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="normal|bold" />
+
+            <TextView
+                android:id="@+id/connectivity_route"
+                android:text="@string/unknown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:text="@string/connectivity_download"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="normal|bold" />
+
+            <TextView
+                android:id="@+id/connectivity_download"
+                android:text="@string/unknown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:text="@string/connectivity_upload"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="normal|bold" />
+
+            <TextView
+                android:id="@+id/connectivity_upload"
+                android:text="@string/unknown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:text="@string/connectivity_transport"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="normal|bold" />
+
+            <TextView
+                android:id="@+id/connectivity_transport"
+                android:text="@string/unknown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>
