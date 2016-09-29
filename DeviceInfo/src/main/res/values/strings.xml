@@ -13,11 +13,11 @@
     <string name="battery_health">Battery Health</string>
     <string name="battery_plugged">Battery Plugged</string>
     <string name="battery_plugged_unplugged">Not Plugged</string>
-    <string name="battery_charge_level">Battery Charged</string>
+    <string name="battery_charge">Battery Charged</string>
     <string name="battery_voltage">Battery Voltage</string>
     <string name="battery_temperature">Battery Temperature</string>
     <string name="battery_technology">Battery Technology</string>
-    <string name="connectivity_active">Active Network</string>
+    <string name="connectivity">Active Network</string>
     <string name="connectivity_default">Default Network</string>
     <string name="connectivity_state">Connection State</string>
     <string name="connectivity_extra">Extra Information</string>
