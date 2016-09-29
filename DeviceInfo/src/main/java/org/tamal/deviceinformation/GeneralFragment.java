@@ -21,7 +21,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 public class GeneralFragment extends Fragment {
 
@@ -39,12 +38,22 @@ public class GeneralFragment extends Fragment {
         Intent batteryStatus = getContext().registerReceiver(null, intentFilter);
         if (batteryStatus != null) {
             createHeading(getString(R.string.battery));
-            addMap(getBatteryDetails(batteryStatus));
+            addBatteryDetails(batteryStatus);
         }
         createHeading(getString(R.string.connectivity_active));
-        addMap(getNetworkDetails());
+        addNetworkDetails();
 
         return rootView;
+    }
+
+    private void addProperty(int resId, Object value) {
+        TextView keyView = new TextView(getContext());
+        keyView.setTypeface(Typeface.DEFAULT_BOLD);
+        keyView.setText(getString(resId));
+        viewGroup.addView(keyView);
+        TextView valueView = new TextView(getContext());
+        valueView.setText(Utils.toString(value, "\n", "", "", null));
+        viewGroup.addView(valueView);
     }
 
     private void addMap(Map<String, String> map) {
@@ -70,24 +79,23 @@ public class GeneralFragment extends Fragment {
         viewGroup.addView(headingView);
     }
 
-    private Map<String, String> getBatteryDetails(Intent batteryStatus) {
-        Map<String, String> map = new TreeMap<>();
+    private void addBatteryDetails(Intent batteryStatus) {
         Boolean present = batteryStatus.getBooleanExtra(BatteryManager.EXTRA_PRESENT, false);
-        map.put(getString(R.string.battery_present), String.valueOf(present));
+        addProperty(R.string.battery_present, present);
 
         String status = getString(R.string.unknown);
         int key = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
         if (batteryStatusMap.containsKey(key)) {
             status = batteryStatusMap.get(key).substring("BATTERY_STATUS_".length());
         }
-        map.put(getString(R.string.battery_status), status);
+        addProperty(R.string.battery_status, status);
 
         String health = getString(R.string.unknown);
         key = batteryStatus.getIntExtra(BatteryManager.EXTRA_HEALTH, -1);
         if (batteryHealthMap.containsKey(key)) {
             health = batteryHealthMap.get(key).substring("BATTERY_HEALTH_".length());
         }
-        map.put(getString(R.string.battery_health), health);
+        addProperty(R.string.battery_health, health);
 
         String plugged = getString(R.string.unknown);
         key = batteryStatus.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
@@ -96,49 +104,47 @@ public class GeneralFragment extends Fragment {
         } else if (key == 0) {
             plugged = getString(R.string.battery_plugged_unplugged);
         }
-        map.put(getString(R.string.battery_plugged), plugged);
+        addProperty(R.string.battery_plugged, plugged);
 
         int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
         int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
         int percent = 100 * level / scale;
-        map.put(getString(R.string.battery_charge_level), percent + "%");
+        addProperty(R.string.battery_charge_level, percent + "%");
 
         int voltage = batteryStatus.getIntExtra(BatteryManager.EXTRA_VOLTAGE, -1);
-        map.put(getString(R.string.battery_voltage), (voltage / 1000f) + "V");
+        addProperty(R.string.battery_voltage, (voltage / 1000f) + "V");
 
         float temperature = batteryStatus.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, -1) / 10f;
-        map.put(getString(R.string.battery_temperature), temperature + getString(R.string.sensor_unit_deg));
+        addProperty(R.string.battery_temperature, temperature + getString(R.string.sensor_unit_deg));
 
         String technology = batteryStatus.getStringExtra(BatteryManager.EXTRA_TECHNOLOGY);
         if (technology == null) {
             technology = getString(R.string.unknown);
         }
-        map.put(getString(R.string.battery_technology), technology);
-        return map;
+        addProperty(R.string.battery_technology, technology);
     }
 
-    private Map<String, String> getNetworkDetails() {
+    private void addNetworkDetails() {
         ConnectivityManager connectivityManager = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo info = connectivityManager.getActiveNetworkInfo();
-        Map<String, String> map = new TreeMap<>();
-        map.put(getString(R.string.connectivity_type), info.getTypeName() + " [" + info.getSubtypeName() + "]");
-        map.put(getString(R.string.connectivity_state), info.getState().name() + " / " + info.getDetailedState().name());
+        addProperty(R.string.connectivity_type, info.getTypeName() + " (" + info.getSubtypeName() + ")");
+        addProperty(R.string.connectivity_state, info.getState().name() + " / " + info.getDetailedState().name());
         String extra = info.getExtraInfo();
         if (extra != null) {
-            map.put(getString(R.string.connectivity_extra), extra);
+            addProperty(R.string.connectivity_extra, extra);
         }
         String reason = info.getReason();
         if (reason != null) {
-            map.put(getString(R.string.connectivity_reason), reason);
+            addProperty(R.string.connectivity_reason, reason);
         }
-        map.put(getString(R.string.connectivity_available), String.valueOf(info.isAvailable()));
-        map.put(getString(R.string.connectivity_connected), String.valueOf(info.isConnected()));
-        map.put(getString(R.string.connectivity_failover), String.valueOf(info.isFailover()));
-        map.put(getString(R.string.connectivity_roaming), String.valueOf(info.isRoaming()));
-        map.put(getString(R.string.connectivity_metered), String.valueOf(connectivityManager.isActiveNetworkMetered()));
+        addProperty(R.string.connectivity_available, info.isAvailable());
+        addProperty(R.string.connectivity_connected, info.isConnected());
+        addProperty(R.string.connectivity_failover, info.isFailover());
+        addProperty(R.string.connectivity_roaming, info.isRoaming());
+        addProperty(R.string.connectivity_metered, connectivityManager.isActiveNetworkMetered());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             String active = getString(connectivityManager.isDefaultNetworkActive() ? R.string.active : R.string.inactive);
-            map.put(getString(R.string.connectivity_default), active);
+            addProperty(R.string.connectivity_default, active);
             Network network = null;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 network = connectivityManager.getActiveNetwork();
@@ -150,28 +156,23 @@ public class GeneralFragment extends Fragment {
             }
             if (network != null) {
                 LinkProperties linkProperties = connectivityManager.getLinkProperties(network);
-                String string = Utils.toString(linkProperties.getDnsServers(), "\n", "", "", null);
-                map.put(getString(R.string.connectivity_dns), string);
-                map.put(getString(R.string.connectivity_domains), linkProperties.getDomains());
-                map.put(getString(R.string.connectivity_interface), linkProperties.getInterfaceName());
-                string = Utils.toString(linkProperties.getLinkAddresses(), "\n", "", "", null);
-                map.put(getString(R.string.connectivity_link), string);
-                string = Utils.toString(linkProperties.getRoutes(), "\n", "", "", null);
-                map.put(getString(R.string.connectivity_route), string);
+                addProperty(R.string.connectivity_dns, linkProperties.getDnsServers());
+                addProperty(R.string.connectivity_domains, linkProperties.getDomains());
+                addProperty(R.string.connectivity_interface, linkProperties.getInterfaceName());
+                addProperty(R.string.connectivity_link, linkProperties.getLinkAddresses());
+                addProperty(R.string.connectivity_route, linkProperties.getRoutes());
                 NetworkCapabilities networkCapabilities = connectivityManager.getNetworkCapabilities(network);
-                map.put(getString(R.string.connectivity_download), getString(R.string.speed_kbps, networkCapabilities.getLinkDownstreamBandwidthKbps()));
-                map.put(getString(R.string.connectivity_upload), getString(R.string.speed_kbps, networkCapabilities.getLinkUpstreamBandwidthKbps()));
+                addProperty(R.string.connectivity_download, getString(R.string.speed_kbps, networkCapabilities.getLinkDownstreamBandwidthKbps()));
+                addProperty(R.string.connectivity_upload, getString(R.string.speed_kbps, networkCapabilities.getLinkUpstreamBandwidthKbps()));
                 List<String> transportCapabilities = new ArrayList<>();
                 for (Map.Entry<String, Integer> entry : networkTransportMap.entrySet()) {
                     if (networkCapabilities.hasCapability(entry.getValue())) {
                         transportCapabilities.add(entry.getKey().substring("TRANSPORT_".length()));
                     }
                 }
-                string = Utils.toString(transportCapabilities, "\n", "", "", null);
-                map.put(getString(R.string.connectivity_transport), string);
+                addProperty(R.string.connectivity_transport, transportCapabilities);
             }
         }
-        return map;
     }
 
 }
