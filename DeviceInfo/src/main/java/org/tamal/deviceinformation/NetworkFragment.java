@@ -20,7 +20,7 @@ import java.util.Map;
 
 public class NetworkFragment extends Fragment {
 
-    private static final Map<String, Integer> networkTransportMap = Utils.findConstants(NetworkCapabilities.class, int.class, "TRANSPORT_.*");
+    private static final Map<String, Integer> networkTransportMap = Utils.findConstants(NetworkCapabilities.class, int.class, "TRANSPORT_(.+)");
     private View rootView;
 
     @Override

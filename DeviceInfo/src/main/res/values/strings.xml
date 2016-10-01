@@ -3,11 +3,15 @@
 
     <string name="unknown">Unknown</string>
     <string name="loading">Loading&#8230;</string>
+    <string name="ok">OK</string>
 
     <string name="activity_main">Home</string>
+    <string name="activity_hardware">Hardware</string>
+    <string name="activity_software">Software</string>
 
     <string name="fragment_general">General</string>
-    <string name="battery">Battery Details</string>
+
+    <string name="fragment_battery">Battery</string>
     <string name="battery_present">Battery Present</string>
     <string name="battery_status">Battery Status</string>
     <string name="battery_health">Battery Health</string>
@@ -81,13 +85,12 @@
 
     <string name="fragment_build">Build</string>
     <string name="build_build">Build Information</string>
-    <string name="build_environment">Environment Variables</string>
-    <string name="build_properties">System Properties</string>
+
+    <string name="fragment_env">Environment</string>
+    <string name="env_environment">Environment Variables</string>
+    <string name="env_properties">System Properties</string>
 
     <string name="fragment_fonts">Fonts</string>
     <string name="fonts_try">Enter some text</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

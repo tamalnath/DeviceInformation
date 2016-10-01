@@ -11,6 +11,8 @@ import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public final class Utils {
 
@@ -21,6 +23,7 @@ public final class Utils {
 
     public static <T> Map<String, T> findConstants(Class<?> classType, @Nullable Class<T> fieldType, @Nullable String regex) {
         Map<String, T> map = new HashMap<>();
+        Pattern pattern = regex == null ? null : Pattern.compile(regex);
         for (Field field : classType.getDeclaredFields()) {
             boolean isPublic = Modifier.isPublic(field.getModifiers());
             boolean isStatic = Modifier.isStatic(field.getModifiers());
@@ -31,12 +34,20 @@ public final class Utils {
             if (fieldType != null && field.getType() != fieldType) {
                 continue;
             }
-            if (regex == null || field.getName().matches(regex)) {
-                try {
-                    map.put(field.getName(), (T) field.get(null));
-                } catch (IllegalAccessException e) {
-                    throw new RuntimeException(e);
+            String name = field.getName();
+            if (pattern != null) {
+                Matcher matcher = pattern.matcher(name);
+                if (!matcher.find()) {
+                    continue;
                 }
+                if (matcher.groupCount() == 1) {
+                    name = matcher.group(1);
+                }
+            }
+            try {
+                map.put(name, (T) field.get(null));
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
             }
         }
         return map;
@@ -152,6 +163,14 @@ public final class Utils {
             }
             sb.append(end);
             return sb.toString();
+        }
+
+        try {
+            if (obj.getClass().getMethod("toString").getDeclaringClass() == Object.class) {
+                return "";
+            }
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
         }
         return String.valueOf(obj);
     }

@@ -11,13 +11,25 @@
         android:orientation="vertical">
 
         <TextView
-            android:text="@string/build_build"
+            android:text="@string/env_environment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="@style/Heading" />
 
         <LinearLayout
-            android:id="@+id/build_build"
+            android:id="@+id/env_environment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
+        <TextView
+            android:text="@string/env_properties"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/Heading" />
+
+        <LinearLayout
+            android:id="@+id/env_properties"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" />

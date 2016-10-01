@@ -25,7 +25,9 @@ import java.util.Map;
 public class SensorsFragment extends Fragment implements SensorEventListener {
 
     private static final int DELAY_MILLIS = 100;
-    private static final Map<Integer, String> sensorTypeMap = Utils.reverseMap(Utils.findConstants(Sensor.class, int.class, "TYPE_.*"));
+    private static final Map<Integer, String> SENSOR_TYPES = Utils.reverseMap(Utils.findConstants(Sensor.class, int.class, "TYPE_(.+)"));
+    private static final Map<String, Float> GRAVITY = Utils.findConstants(SensorManager.class, float.class, "GRAVITY_(.+)");
+    private static final Map<String, Float> LIGHT = Utils.findConstants(SensorManager.class, float.class, "LIGHT_(.+)");
 
     SensorManager sensorManager;
     List<Sensor> sensors;
@@ -89,13 +91,11 @@ public class SensorsFragment extends Fragment implements SensorEventListener {
             case Sensor.TYPE_GRAVITY:
                 magnitude = (float) Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
                 value = getString(R.string.sensor_values_xyz_unit, v[0], v[1], v[2], unit);
-                value += " (" + findNearest("GRAVITY_", magnitude) + ")";
+                value += " (" + findNearest(GRAVITY, magnitude) + ")";
                 break;
             case Sensor.TYPE_MAGNETIC_FIELD:
             case Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED:
-                magnitude = (float) Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
                 value = getString(R.string.sensor_values_xyz_unit, v[0], v[1], v[2], unit);
-                value += " (" + findNearest("MAGNETIC_FIELD_", magnitude) + ")";
                 break;
             case Sensor.TYPE_GYROSCOPE:
             case Sensor.TYPE_GYROSCOPE_UNCALIBRATED:
@@ -115,7 +115,7 @@ public class SensorsFragment extends Fragment implements SensorEventListener {
                 break;
             case Sensor.TYPE_LIGHT:
                 value = getString(R.string.sensor_value_unit, event.values[0], unit);
-                value += " (" + findNearest("LIGHT_", event.values[0]) + ")";
+                value += " (" + findNearest(LIGHT, event.values[0]) + ")";
                 break;
             default:
                 value = Arrays.toString(v);
@@ -155,8 +155,7 @@ public class SensorsFragment extends Fragment implements SensorEventListener {
         return "";
     }
 
-    private static String findNearest(String prefix, float value) {
-        Map<String, Float> map = Utils.findConstants(SensorManager.class, float.class, prefix + ".*");
+    private static String findNearest(Map<String, Float> map, float value) {
         float absValue = Math.abs(value);
         String name = null;
         float minDelta = Float.MAX_VALUE;
@@ -170,7 +169,6 @@ public class SensorsFragment extends Fragment implements SensorEventListener {
         if (name == null) {
             return null;
         }
-        name = name.substring(prefix.length());
         return name;
     }
 
@@ -189,7 +187,7 @@ public class SensorsFragment extends Fragment implements SensorEventListener {
             View viewGroup = inflater.inflate(R.layout.sensor_details, null);
 
             String unknown = getString(R.string.sensor_type_unknown, sensor.getType());
-            String sensorType = Utils.getOrDefault(sensorTypeMap, sensor.getType(), unknown);
+            String sensorType = Utils.getOrDefault(SENSOR_TYPES, sensor.getType(), unknown);
             String unit = getUnit(sensor.getType());
             TextView view;
             view = (TextView) viewGroup.findViewById(R.id.sensor_id);

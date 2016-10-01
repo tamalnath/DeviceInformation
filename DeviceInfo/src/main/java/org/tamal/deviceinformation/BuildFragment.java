@@ -31,26 +31,6 @@ public class BuildFragment extends Fragment {
             valueView.setText(Utils.toString(entry.getValue()));
             buildLayout.addView(valueView);
         }
-        ViewGroup environmentLayout = (ViewGroup) rootView.findViewById(R.id.build_environment);
-        for (Map.Entry<String, String> entry : System.getenv().entrySet()) {
-            TextView keyView = new TextView(getContext());
-            keyView.setTypeface(Typeface.DEFAULT_BOLD);
-            keyView.setText(entry.getKey());
-            environmentLayout.addView(keyView);
-            TextView valueView = new TextView(getContext());
-            valueView.setText(entry.getValue());
-            environmentLayout.addView(valueView);
-        }
-        ViewGroup propertiesLayout = (ViewGroup) rootView.findViewById(R.id.build_properties);
-        for (Map.Entry<Object, Object> entry : System.getProperties().entrySet()) {
-            TextView keyView = new TextView(getContext());
-            keyView.setTypeface(Typeface.DEFAULT_BOLD);
-            keyView.setText(Utils.toString(entry.getKey()));
-            propertiesLayout.addView(keyView);
-            TextView valueView = new TextView(getContext());
-            valueView.setText(Utils.toString(entry.getValue()));
-            propertiesLayout.addView(valueView);
-        }
         return rootView;
     }
 
