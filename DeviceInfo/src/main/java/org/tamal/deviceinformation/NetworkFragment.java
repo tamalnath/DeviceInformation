@@ -78,7 +78,7 @@ public class NetworkFragment extends Fragment {
                 List<String> transportCapabilities = new ArrayList<>();
                 for (Map.Entry<String, Integer> entry : networkTransportMap.entrySet()) {
                     if (networkCapabilities.hasCapability(entry.getValue())) {
-                        transportCapabilities.add(entry.getKey().substring("TRANSPORT_".length()));
+                        transportCapabilities.add(entry.getKey());
                     }
                 }
                 addProperty(R.id.connectivity_transport, transportCapabilities);
