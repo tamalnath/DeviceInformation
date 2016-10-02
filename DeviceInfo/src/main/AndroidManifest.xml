@@ -3,6 +3,7 @@
     package="org.tamal.deviceinformation">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
     <application
@@ -19,14 +20,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".HardwareActivity"
-            android:icon="@drawable/ic_memory"
-            android:label="@string/activity_hardware" />
-        <activity
-            android:name=".SoftwareActivity"
-            android:icon="@drawable/ic_android"
-            android:label="@string/activity_software" />
     </application>
 
 </manifest>

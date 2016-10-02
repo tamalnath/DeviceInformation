@@ -10,12 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+class Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int TYPE_HEADER = 1;
     private static final int TYPE_KEY_VALUE = 2;
 
-    List<Data> dataList = new ArrayList<>();
+    private List<Data> dataList = new ArrayList<>();
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -38,6 +38,9 @@ public class Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             ((KeyValue) holder).keyView.setText(data.key);
             ((KeyValue) holder).valueView.setText(data.value);
         }
+        if (data.customizer != null) {
+            data.customizer.customize(holder.itemView);
+        }
     }
 
     @Override
@@ -54,24 +57,39 @@ public class Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     void addHeader(String header) {
+        addHeader(header, null);
+    }
+
+    void addHeader(String header, Customizer customizer) {
         Data data = new Data();
         data.header = header;
+        data.customizer = customizer;
         dataList.add(data);
     }
 
     void addMap(Map<?, ?> map) {
+        addMap(map, null);
+    }
+
+    void addMap(Map<?, ?> map, Customizer customizer) {
         for (Map.Entry<?, ?> entry : map.entrySet()) {
             Data data = new Data();
             data.key = Utils.toString(entry.getKey());
             data.value = Utils.toString(entry.getValue(), "\n", "", "", null);
+            data.customizer = customizer;
             dataList.add(data);
         }
+    }
+
+    interface Customizer {
+        void customize(View itemView);
     }
 
     private static class Data {
         String header;
         String key;
         String value;
+        Customizer customizer;
     }
 
     private static class Header extends RecyclerView.ViewHolder {
@@ -92,4 +110,5 @@ public class Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             valueView = (TextView) itemView.findViewById(R.id.value);
         }
     }
+
 }

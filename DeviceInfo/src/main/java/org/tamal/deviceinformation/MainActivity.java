@@ -11,10 +11,24 @@ public class MainActivity extends BaseActivity {
 
     private Fragment[] fragments = {
             new GeneralFragment(),
+            new NetworkFragment(),
+            new WifiFragment(),
+            new TelephonyFragment(),
+            new BatteryFragment(),
+            new SensorsFragment(),
+            new BuildFragment(),
+            new FontsFragment()
     };
 
     private int[] titles = {
             R.string.fragment_general,
+            R.string.fragment_network,
+            R.string.fragment_wifi,
+            R.string.fragment_telephony,
+            R.string.fragment_battery,
+            R.string.fragment_sensors,
+            R.string.fragment_build,
+            R.string.fragment_fonts
     };
 
     public void onCreate(Bundle savedInstanceState) {

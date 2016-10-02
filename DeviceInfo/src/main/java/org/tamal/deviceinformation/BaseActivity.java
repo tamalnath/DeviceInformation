@@ -64,14 +64,6 @@ abstract class BaseActivity extends AppCompatActivity {
             item = menu.findItem(R.id.action_main);
             iconId = R.drawable.ic_home;
         }
-        if (this instanceof HardwareActivity) {
-            item = menu.findItem(R.id.action_hardware);
-            iconId = R.drawable.ic_memory;
-        }
-        if (this instanceof SoftwareActivity) {
-            item = menu.findItem(R.id.action_software);
-            iconId = R.drawable.ic_android;
-        }
         if (item != null) {
             item.setVisible(false);
         }
@@ -87,12 +79,6 @@ abstract class BaseActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_main:
                 startActivity(new Intent(this, MainActivity.class));
-                break;
-            case R.id.action_hardware:
-                startActivity(new Intent(this, HardwareActivity.class));
-                break;
-            case R.id.action_software:
-                startActivity(new Intent(this, SoftwareActivity.class));
                 break;
             default:
                 return super.onOptionsItemSelected(item);

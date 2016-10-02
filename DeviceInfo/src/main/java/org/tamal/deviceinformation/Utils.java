@@ -114,19 +114,22 @@ final class Utils {
         return map;
     }
 
-    static <K, V> Map<V, K> reverseMap(Map<K, V> map) {
-        Map<V, K> reverse = new HashMap<>(map.size());
-        for (Map.Entry<K, V> entry : map.entrySet()) {
-            reverse.put(entry.getValue(), entry.getKey());
+    static Map<String, Object> findFields(Object object) {
+        Map<String, Object> map = new TreeMap<>();
+        for (Field field : object.getClass().getFields()) {
+            boolean isPublic = Modifier.isPublic(field.getModifiers());
+            boolean isStatic = Modifier.isStatic(field.getModifiers());
+            if (!isPublic || isStatic) {
+                continue;
+            }
+            try {
+                Object value = field.get(object);
+                map.put(field.getName(), value);
+            } catch (IllegalAccessException e) {
+                Log.d(TAG, "Field: " + field + " Error: " + e.getMessage());
+            }
         }
-        return reverse;
-    }
-
-    static <K, V> V getOrDefault(Map<K, V> map, K key, V defaultValue) {
-        if (map.containsKey(key)) {
-            return map.get(key);
-        }
-        return defaultValue;
+        return map;
     }
 
     static String toString(Object obj) {

@@ -56,7 +56,7 @@ public class BatteryFragment extends Fragment {
         int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
         int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
         int percent = 100 * level / scale;
-        map.put(getString(R.string.battery_charge), percent);
+        map.put(getString(R.string.battery_charge), percent + "%");
 
         int voltage = batteryStatus.getIntExtra(BatteryManager.EXTRA_VOLTAGE, -1);
         map.put(getString(R.string.battery_voltage), (voltage / 1000f) + "V");

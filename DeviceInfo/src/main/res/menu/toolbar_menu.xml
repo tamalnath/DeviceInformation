@@ -8,16 +8,4 @@
         android:title="@string/activity_main"
         app:showAsAction="ifRoom"/>
 
-    <item
-        android:id="@+id/action_hardware"
-        android:icon="@drawable/ic_memory"
-        android:title="@string/activity_hardware"
-        app:showAsAction="ifRoom"/>
-
-    <item
-        android:id="@+id/action_software"
-        android:icon="@drawable/ic_android"
-        android:title="@string/activity_software"
-        app:showAsAction="ifRoom"/>
-
 </menu>

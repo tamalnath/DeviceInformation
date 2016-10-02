@@ -70,8 +70,11 @@
     <string name="build_properties">System Properties</string>
 
     <string name="fragment_fonts">Fonts</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="fragment_wifi">Wi-Fi</string>
+    <string name="wifi_static">Static Information</string>
+    <string name="wifi_info">Dynamic Information</string>
+    <string name="wifi_dhcp">DHCP Information</string>
+    <string name="wifi_configuration">Wi-Fi Configuration %1$d</string>
+    <string name="wifi_scan">Wi-Fi Scan Result %1$d</string>
 
 </resources>
