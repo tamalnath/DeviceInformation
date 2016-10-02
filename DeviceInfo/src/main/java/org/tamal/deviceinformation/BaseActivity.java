@@ -46,7 +46,7 @@ abstract class BaseActivity extends AppCompatActivity {
                             @Override
                             public void onClick(View v) {
                                 Intent i = new Intent(Intent.ACTION_VIEW);
-                                i.setData(Uri.parse("https://play.google.com/store/apps/details?id=org.tamal.deviceinformation"));
+                                i.setData(Uri.parse("https://github.com/tamalnath/DeviceInformation"));
                                 startActivity(i);
                             }
                         }).show();

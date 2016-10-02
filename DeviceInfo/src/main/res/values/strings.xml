@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">Device Information</string>
 
+    <string name="usage">This application shows different types of information about your device.\n
+        The source code is available at:\n
+        https://github.com/tamalnath/DeviceInformation\n
+        Please report any ussues to:\n
+        tamal.nath@gmail.com.</string>
     <string name="unknown">Unknown</string>
     <string name="loading">Loading&#8230;</string>
     <string name="ok">OK</string>
