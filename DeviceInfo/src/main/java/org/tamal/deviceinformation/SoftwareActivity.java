@@ -7,14 +7,12 @@ public class SoftwareActivity extends BaseActivity {
 
     private Fragment[] fragments = {
             new BuildFragment(),
-            new EnvFragment(),
             new NetworkFragment(),
             new FontsFragment()
     };
 
     private int[] titles = {
             R.string.fragment_build,
-            R.string.fragment_env,
             R.string.fragment_network,
             R.string.fragment_fonts
     };

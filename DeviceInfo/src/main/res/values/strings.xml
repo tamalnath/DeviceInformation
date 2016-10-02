@@ -23,28 +23,9 @@
     <string name="battery_technology">Battery Technology</string>
 
     <string name="fragment_network">Network</string>
-    <string name="connectivity">Active Network</string>
-    <string name="connectivity_default">Default Network</string>
-    <string name="connectivity_state">Connection State</string>
-    <string name="connectivity_extra">Extra Information</string>
-    <string name="connectivity_reason">Connection Failure Reason</string>
-    <string name="connectivity_type">Connection Type</string>
-    <string name="connectivity_available">Connection Available</string>
-    <string name="connectivity_connected">Connected</string>
-    <string name="connectivity_failover">Connectivity Failover</string>
-    <string name="connectivity_roaming">Roaming</string>
-    <string name="connectivity_metered">Network metered</string>
-    <string name="connectivity_dns">DNS Servers</string>
-    <string name="connectivity_domains">Domains</string>
-    <string name="connectivity_interface">Interfaces</string>
-    <string name="connectivity_link">Link Addresses</string>
-    <string name="connectivity_route">Route Information</string>
-    <string name="connectivity_download">Download Speed</string>
-    <string name="connectivity_upload">Upload Speed</string>
-    <string name="connectivity_transport">Transport Types</string>
-    <string name="speed_kbps">%1$d Kbps</string>
-    <string name="active">Active</string>
-    <string name="inactive">Inactive</string>
+    <string name="network_active">Active Network</string>
+
+    <string name="fragment_telephony">Cellular Network</string>
 
     <string name="fragment_sensors">Sensors</string>
 
@@ -85,11 +66,12 @@
 
     <string name="fragment_build">Build</string>
     <string name="build_build">Build Information</string>
-
-    <string name="fragment_env">Environment</string>
-    <string name="env_environment">Environment Variables</string>
-    <string name="env_properties">System Properties</string>
+    <string name="build_environment">Environment Variables</string>
+    <string name="build_properties">System Properties</string>
 
     <string name="fragment_fonts">Fonts</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

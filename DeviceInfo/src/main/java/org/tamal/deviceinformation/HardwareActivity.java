@@ -8,11 +8,13 @@ public class HardwareActivity extends BaseActivity {
 
     private Fragment[] fragments = {
             new BatteryFragment(),
+            new TelephonyFragment(),
             new SensorsFragment(),
     };
 
     private int[] titles = {
             R.string.fragment_battery,
+            R.string.fragment_telephony,
             R.string.fragment_sensors
     };
 

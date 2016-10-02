@@ -25,7 +25,6 @@ import java.util.Map;
 public class SensorsFragment extends Fragment implements SensorEventListener {
 
     private static final int DELAY_MILLIS = 100;
-    private static final Map<Integer, String> SENSOR_TYPES = Utils.reverseMap(Utils.findConstants(Sensor.class, int.class, "TYPE_(.+)"));
     private static final Map<String, Float> GRAVITY = Utils.findConstants(SensorManager.class, float.class, "GRAVITY_(.+)");
     private static final Map<String, Float> LIGHT = Utils.findConstants(SensorManager.class, float.class, "LIGHT_(.+)");
 
@@ -186,8 +185,7 @@ public class SensorsFragment extends Fragment implements SensorEventListener {
         public void onClick(View v) {
             View viewGroup = inflater.inflate(R.layout.sensor_details, null);
 
-            String unknown = getString(R.string.sensor_type_unknown, sensor.getType());
-            String sensorType = Utils.getOrDefault(SENSOR_TYPES, sensor.getType(), unknown);
+            String sensorType = Utils.findConstant(Sensor.class, sensor.getType(), "TYPE_(.+)");
             String unit = getUnit(sensor.getType());
             TextView view;
             view = (TextView) viewGroup.findViewById(R.id.sensor_id);

@@ -5,75 +5,69 @@ import android.content.IntentFilter;
 import android.os.BatteryManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.ArrayMap;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import java.util.Map;
 
 public class BatteryFragment extends Fragment {
 
-    private static final Map<Integer, String> batteryStatusMap = Utils.reverseMap(Utils.findConstants(BatteryManager.class, int.class, "BATTERY_STATUS_.*"));
-    private static final Map<Integer, String> batteryHealthMap = Utils.reverseMap(Utils.findConstants(BatteryManager.class, int.class, "BATTERY_HEALTH_.*"));
-    private static final Map<Integer, String> batteryPluggedMap = Utils.reverseMap(Utils.findConstants(BatteryManager.class, int.class, "BATTERY_PLUGGED_.*"));
-    private View rootView;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_battery, container, false);
+        RecyclerView recyclerView = (RecyclerView) inflater.inflate(R.layout.recycler_view, container, false);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        Adapter adapter = new Adapter();
         IntentFilter intentFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
         Intent batteryStatus = getContext().registerReceiver(null, intentFilter);
         if (batteryStatus != null) {
-            addBatteryDetails(batteryStatus);
+            adapter.addMap(addBatteryDetails(batteryStatus));
         }
-        return rootView;
+        recyclerView.setAdapter(adapter);
+        return recyclerView;
     }
 
-    private void addProperty(int resId, Object value) {
-        TextView textView = (TextView) rootView.findViewById(resId);
-        textView.setText(Utils.toString(value, "\n", "", "", null));
-    }
-
-    private void addBatteryDetails(Intent batteryStatus) {
-        addProperty(R.id.battery_present, batteryStatus.getBooleanExtra(BatteryManager.EXTRA_PRESENT, false));
+    private Map<String, Object> addBatteryDetails(Intent batteryStatus) {
+        Map<String, Object> map = new ArrayMap<>();
+        map.put(getString(R.string.battery_present), batteryStatus.getBooleanExtra(BatteryManager.EXTRA_PRESENT, false));
 
         int key = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
-        if (batteryStatusMap.containsKey(key)) {
-            String status = batteryStatusMap.get(key).substring("BATTERY_STATUS_".length());
-            addProperty(R.id.battery_status, status);
-        }
+        String value = Utils.findConstant(BatteryManager.class, key, "BATTERY_STATUS_(.*)");
+        map.put(getString(R.string.battery_status), value);
 
         key = batteryStatus.getIntExtra(BatteryManager.EXTRA_HEALTH, -1);
-        if (batteryHealthMap.containsKey(key)) {
-            String health = batteryHealthMap.get(key).substring("BATTERY_HEALTH_".length());
-            addProperty(R.id.battery_health, health);
-        }
+        value = Utils.findConstant(BatteryManager.class, key, "BATTERY_HEALTH_(.*)");
+        map.put(getString(R.string.battery_health), value);
 
-        String plugged = getString(R.string.unknown);
+        value = getString(R.string.unknown);
         key = batteryStatus.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
-        if (batteryPluggedMap.containsKey(key)) {
-            plugged = batteryPluggedMap.get(key).substring("BATTERY_PLUGGED_".length());
+        value = Utils.findConstant(BatteryManager.class, key, "BATTERY_PLUGGED_(.*)");
+        if (key > 0) {
+            value = Utils.findConstant(BatteryManager.class, key, "BATTERY_PLUGGED_(.*)");
         } else if (key == 0) {
-            plugged = getString(R.string.battery_plugged_unplugged);
+            value = getString(R.string.battery_plugged_unplugged);
         }
-        addProperty(R.id.battery_plugged, plugged);
+        map.put(getString(R.string.battery_plugged), value);
 
         int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
         int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
         int percent = 100 * level / scale;
-        addProperty(R.id.battery_charge, percent + "%");
+        map.put(getString(R.string.battery_charge), percent);
 
         int voltage = batteryStatus.getIntExtra(BatteryManager.EXTRA_VOLTAGE, -1);
-        addProperty(R.id.battery_voltage, (voltage / 1000f) + "V");
+        map.put(getString(R.string.battery_voltage), (voltage / 1000f) + "V");
 
         float temperature = batteryStatus.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, -1) / 10f;
-        addProperty(R.id.battery_temperature, temperature + getString(R.string.sensor_unit_deg));
+        map.put(getString(R.string.battery_temperature), temperature + getString(R.string.sensor_unit_deg));
 
         String technology = batteryStatus.getStringExtra(BatteryManager.EXTRA_TECHNOLOGY);
-        if (technology != null) {
-            addProperty(R.id.battery_technology, technology);
-        }
+        map.put(getString(R.string.battery_technology), technology);
+
+        return map;
     }
 
 }

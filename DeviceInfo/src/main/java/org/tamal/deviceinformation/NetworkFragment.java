@@ -9,53 +9,31 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.reflect.Array;
 import java.util.Map;
 
 public class NetworkFragment extends Fragment {
 
-    private static final Map<String, Integer> networkTransportMap = Utils.findConstants(NetworkCapabilities.class, int.class, "TRANSPORT_(.+)");
-    private View rootView;
+    private static final Map<String, Integer> NETWORK_CAPABILITIES = Utils.findConstants(NetworkCapabilities.class, int.class, "NET_CAPABILITY_(.+)");
+    private static final Map<String, Integer> NETWORK_TRANSPORT = Utils.findConstants(NetworkCapabilities.class, int.class, "TRANSPORT_(.+)");
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_network, container, false);
-        addNetworkDetails();
-        return rootView;
-    }
-
-    private void addProperty(int resId, Object value) {
-        TextView textView = (TextView) rootView.findViewById(resId);
-        textView.setText(Utils.toString(value, "\n", "", "", null));
-    }
-
-    private void addNetworkDetails() {
+        RecyclerView recyclerView = (RecyclerView) inflater.inflate(R.layout.recycler_view, container, false);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        Adapter adapter = new Adapter();
         ConnectivityManager connectivityManager = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo info = connectivityManager.getActiveNetworkInfo();
-        addProperty(R.id.connectivity_type, info.getTypeName() + " (" + info.getSubtypeName() + ")");
-        addProperty(R.id.connectivity_state, info.getState().name() + " / " + info.getDetailedState().name());
-        String extra = info.getExtraInfo();
-        if (extra != null) {
-            addProperty(R.id.connectivity_extra, extra);
-        }
-        String reason = info.getReason();
-        if (reason != null) {
-            addProperty(R.id.connectivity_reason, reason);
-        }
-        addProperty(R.id.connectivity_available, info.isAvailable());
-        addProperty(R.id.connectivity_connected, info.isConnected());
-        addProperty(R.id.connectivity_failover, info.isFailover());
-        addProperty(R.id.connectivity_roaming, info.isRoaming());
-        addProperty(R.id.connectivity_metered, connectivityManager.isActiveNetworkMetered());
+        adapter.addHeader(getString(R.string.network_active));
+        adapter.addMap(Utils.findProperties(info));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            String active = getString(connectivityManager.isDefaultNetworkActive() ? R.string.active : R.string.inactive);
-            addProperty(R.id.connectivity_default, active);
             Network network = null;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 network = connectivityManager.getActiveNetwork();
@@ -67,25 +45,33 @@ public class NetworkFragment extends Fragment {
             }
             if (network != null) {
                 LinkProperties linkProperties = connectivityManager.getLinkProperties(network);
-                addProperty(R.id.connectivity_dns, linkProperties.getDnsServers());
-                addProperty(R.id.connectivity_domains, linkProperties.getDomains());
-                addProperty(R.id.connectivity_interface, linkProperties.getInterfaceName());
-                addProperty(R.id.connectivity_link, linkProperties.getLinkAddresses());
-                addProperty(R.id.connectivity_route, linkProperties.getRoutes());
+                adapter.addMap(Utils.findProperties(linkProperties));
                 NetworkCapabilities networkCapabilities = connectivityManager.getNetworkCapabilities(network);
-                addProperty(R.id.connectivity_download, getString(R.string.speed_kbps, networkCapabilities.getLinkDownstreamBandwidthKbps()));
-                addProperty(R.id.connectivity_upload, getString(R.string.speed_kbps, networkCapabilities.getLinkUpstreamBandwidthKbps()));
-                List<String> transportCapabilities = new ArrayList<>();
-                for (Map.Entry<String, Integer> entry : networkTransportMap.entrySet()) {
-                    if (networkCapabilities.hasCapability(entry.getValue())) {
-                        transportCapabilities.add(entry.getKey());
-                    }
-                }
-                addProperty(R.id.connectivity_transport, transportCapabilities);
+                Map<String, Object> map = Utils.findProperties(networkCapabilities);
+                expandArray(map, "capabilities", NETWORK_CAPABILITIES);
+                expandArray(map, "transportTypes", NETWORK_TRANSPORT);
+                adapter.addMap(map);
             }
-        } else {
-            rootView.findViewById(R.id.network_lollipop).setVisibility(View.GONE);
         }
+        recyclerView.setAdapter(adapter);
+        return recyclerView;
     }
 
+    private static void expandArray(Map<String, Object> map, String key, Map<String, Integer> lookupMap) {
+        Object object = map.get(key);
+        if (object.getClass().isArray()) {
+            int length = Array.getLength(object);
+            String[] array = new String[length];
+            for (int i = 0; i < length; i++) {
+                int item = Array.getInt(object, i);
+                for (Map.Entry<String, Integer> entry : lookupMap.entrySet()) {
+                    if (entry.getValue().equals(item)) {
+                        array[i] = entry.getKey();
+                        break;
+                    }
+                }
+            }
+            map.put(key, array);
+        }
+    }
 }

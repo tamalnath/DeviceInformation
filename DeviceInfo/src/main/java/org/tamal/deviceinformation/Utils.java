@@ -11,18 +11,19 @@ import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public final class Utils {
+final class Utils {
 
     private static final String TAG = "Utils";
 
     private Utils() {
     }
 
-    public static <T> Map<String, T> findConstants(Class<?> classType, @Nullable Class<T> fieldType, @Nullable String regex) {
-        Map<String, T> map = new HashMap<>();
+    static <T> Map<String, T> findConstants(Class<?> classType, @Nullable Class<T> fieldType, @Nullable String regex) {
+        Map<String, T> map = new TreeMap<>();
         Pattern pattern = regex == null ? null : Pattern.compile(regex);
         for (Field field : classType.getDeclaredFields()) {
             boolean isPublic = Modifier.isPublic(field.getModifiers());
@@ -53,8 +54,38 @@ public final class Utils {
         return map;
     }
 
-    public static Map<String, Object> findProperties(Object object) {
-        Map<String, Object> map = new HashMap<>();
+    static String findConstant(Class<?> classType, Object value, String regex) {
+        Pattern pattern = Pattern.compile(regex);
+        for (Field field : classType.getDeclaredFields()) {
+            boolean isPublic = Modifier.isPublic(field.getModifiers());
+            boolean isStatic = Modifier.isStatic(field.getModifiers());
+            boolean isFinal = Modifier.isFinal(field.getModifiers());
+            if (!isPublic || !isStatic || !isFinal) {
+                continue;
+            }
+            String name = field.getName();
+            if (pattern != null) {
+                Matcher matcher = pattern.matcher(name);
+                if (!matcher.find()) {
+                    continue;
+                }
+                if (matcher.groupCount() == 1) {
+                    name = matcher.group(1);
+                }
+            }
+            try {
+                if (field.get(null).equals(value)) {
+                    return name;
+                }
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return null;
+    }
+
+    static Map<String, Object> findProperties(Object object) {
+        Map<String, Object> map = new TreeMap<>();
         for (Method method : object.getClass().getMethods()) {
             boolean isPublic = Modifier.isPublic(method.getModifiers());
             boolean isStatic = Modifier.isStatic(method.getModifiers());
@@ -75,15 +106,15 @@ public final class Utils {
                 name = Character.toLowerCase(name.charAt(0)) + name.substring(1);
                 map.put(name, value);
             } catch (IllegalAccessException e) {
-                Log.d(TAG, e.getMessage());
+                Log.d(TAG, "Method: " + method + " Error: " + e.getMessage());
             } catch (InvocationTargetException e) {
-                Log.e(TAG, e.getMessage());
+                Log.e(TAG, "Method: " + method + " Error: " + e.getMessage());
             }
         }
         return map;
     }
 
-    public static <K, V> Map<V, K> reverseMap(Map<K, V> map) {
+    static <K, V> Map<V, K> reverseMap(Map<K, V> map) {
         Map<V, K> reverse = new HashMap<>(map.size());
         for (Map.Entry<K, V> entry : map.entrySet()) {
             reverse.put(entry.getValue(), entry.getKey());
@@ -91,18 +122,18 @@ public final class Utils {
         return reverse;
     }
 
-    public static <K, V> V getOrDefault(Map<K, V> map, K key, V defaultValue) {
+    static <K, V> V getOrDefault(Map<K, V> map, K key, V defaultValue) {
         if (map.containsKey(key)) {
             return map.get(key);
         }
         return defaultValue;
     }
 
-    public static String toString(Object obj) {
+    static String toString(Object obj) {
         return toString(obj, null, null, null, null);
     }
 
-    public static String toString(Object obj, String separator, String start, String end, String keyValSep) {
+    static String toString(Object obj, String separator, String start, String end, String keyValSep) {
         if (obj == null) {
             return "null";
         }

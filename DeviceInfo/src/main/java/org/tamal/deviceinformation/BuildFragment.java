@@ -1,37 +1,40 @@
 package org.tamal.deviceinformation;
 
-import android.graphics.Typeface;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.LinkProperties;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import java.io.File;
 import java.util.Map;
 
 public class BuildFragment extends Fragment {
 
+    private static final Map<String, Object> BUILD = Utils.findConstants(Build.class, null, null);
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_build, container, false);
-        ViewGroup buildLayout = (ViewGroup) rootView.findViewById(R.id.build_build);
-        final Map<String, Object> build = Utils.findConstants(Build.class, null, null);
-        for (Map.Entry<String, Object> entry : build.entrySet()) {
-            TextView keyView = new TextView(getContext());
-            keyView.setTypeface(Typeface.DEFAULT_BOLD);
-            keyView.setText(entry.getKey());
-            buildLayout.addView(keyView);
-            TextView valueView = new TextView(getContext());
-            valueView.setText(Utils.toString(entry.getValue()));
-            buildLayout.addView(valueView);
-        }
-        return rootView;
+        RecyclerView recyclerView = (RecyclerView) inflater.inflate(R.layout.recycler_view, container, false);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        Adapter adapter = new Adapter();
+        adapter.addHeader(getString(R.string.build_build));
+        adapter.addMap(BUILD);
+        adapter.addHeader(getString(R.string.build_environment));
+        adapter.addMap(System.getenv());
+        adapter.addHeader(getString(R.string.build_properties));
+        adapter.addMap(System.getProperties());
+        recyclerView.setAdapter(adapter);
+        return recyclerView;
     }
 
 }
