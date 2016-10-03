@@ -22,12 +22,13 @@ public class FontsFragment extends Fragment {
         Adapter adapter = new Adapter();
         for (final File fontFile : new File("/system/fonts").listFiles()) {
             String fontName = fontFile.getName().split("\\.")[0];
-            adapter.addHeader(fontName, new Adapter.Customizer() {
+            adapter.addHeader(fontName, new Adapter.Data() {
+
                 @Override
-                public void customize(View itemView) {
+                public void decorate(RecyclerView.ViewHolder holder, int position) {
                     Typeface typeface = Typeface.createFromFile(fontFile);
-                    ((TextView) itemView).setTextSize(16);
-                    ((TextView) itemView).setTypeface(typeface);
+                    ((TextView) holder.itemView).setTextSize(16);
+                    ((TextView) holder.itemView).setTypeface(typeface);
                 }
             });
         }

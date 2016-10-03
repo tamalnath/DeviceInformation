@@ -48,8 +48,8 @@ public class NetworkFragment extends Fragment {
                 adapter.addMap(Utils.findProperties(linkProperties));
                 NetworkCapabilities networkCapabilities = connectivityManager.getNetworkCapabilities(network);
                 Map<String, Object> map = Utils.findProperties(networkCapabilities);
-                expandArray(map, "capabilities", NETWORK_CAPABILITIES);
-                expandArray(map, "transportTypes", NETWORK_TRANSPORT);
+                expandArray(map, "Capabilities", NETWORK_CAPABILITIES);
+                expandArray(map, "TransportTypes", NETWORK_TRANSPORT);
                 adapter.addMap(map);
             }
         }

@@ -103,7 +103,6 @@ final class Utils {
             }
             try {
                 Object value = method.invoke(object);
-                name = Character.toLowerCase(name.charAt(0)) + name.substring(1);
                 map.put(name, value);
             } catch (IllegalAccessException e) {
                 Log.d(TAG, "Method: " + method + " Error: " + e.getMessage());

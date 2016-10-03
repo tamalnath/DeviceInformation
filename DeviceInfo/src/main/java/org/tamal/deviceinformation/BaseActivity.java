@@ -26,33 +26,21 @@ abstract class BaseActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
     }
 
-    protected void onCreate(Bundle savedInstanceState, Fragment[] fragments, int[] titleIds) {
+    protected void onCreate(Bundle savedInstanceState, Fragment[] fragments, String[] titles) {
         onCreate(savedInstanceState, R.layout.activity_default);
-        String[] titles = new String[titleIds.length];
-        for (int i = 0; i < titles.length; i++) {
-            titles[i] = getString(titleIds[i]);
-        }
         PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager());
         adapter.fragments = fragments;
         adapter.titles = titles;
         ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setAdapter(adapter);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Author: Tamal Kanti Nath", Snackbar.LENGTH_LONG)
-                        .setAction("Visit", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent i = new Intent(Intent.ACTION_VIEW);
-                                i.setData(Uri.parse("https://github.com/tamalnath/DeviceInformation"));
-                                startActivity(i);
-                            }
-                        }).show();
-            }
-        });
+    }
 
+    protected void onCreate(Bundle savedInstanceState, Fragment[] fragments, int[] titleIds) {
+        String[] titles = new String[titleIds.length];
+        for (int i = 0; i < titles.length; i++) {
+            titles[i] = getString(titleIds[i]);
+        }
+        onCreate(savedInstanceState, fragments, titles);
     }
 
     @Override

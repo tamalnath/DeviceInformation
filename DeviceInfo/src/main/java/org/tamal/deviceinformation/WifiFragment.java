@@ -1,6 +1,7 @@
 package org.tamal.deviceinformation;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.DhcpInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
@@ -12,7 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.List;
+import java.math.BigInteger;
+import java.net.InetAddress;
 import java.util.Map;
 
 public class WifiFragment extends Fragment {
@@ -24,37 +26,51 @@ public class WifiFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         Adapter adapter = new Adapter();
         WifiManager wifiManager = (WifiManager) getContext().getSystemService(Context.WIFI_SERVICE);
-        Map<String, Object> map = Utils.findProperties(wifiManager);
-        map.remove("channelList");
-        WifiInfo wifiInfo = (WifiInfo) map.remove("connectionInfo");
-        DhcpInfo dhcpInfo = (DhcpInfo) map.remove("dhcpInfo");
-        List<?> configuredNetworks = (List<?>) map.remove("configuredNetworks");
-        List<?> scanResults = (List<?>) map.remove("scanResults");
-        adapter.addHeader(getString(R.string.wifi_static));
-        adapter.addMap(map);
+        Map<String, Object> wifiManagerMap = Utils.findProperties(wifiManager);
+        wifiManagerMap.remove("ChannelList");
+        WifiInfo wifiInfo = (WifiInfo) wifiManagerMap.remove("ConnectionInfo");
+        DhcpInfo dhcpInfo = (DhcpInfo) wifiManagerMap.remove("DhcpInfo");
+        Object configuredNetworks = wifiManagerMap.remove("ConfiguredNetworks");
+        Object scanResults = wifiManagerMap.remove("ScanResults");
         adapter.addHeader(getString(R.string.wifi_info));
-        adapter.addMap(Utils.findProperties(wifiInfo));
+        Map<String, Object> map = Utils.findProperties(wifiInfo);
+        updateIp(map, "IpAddress");
+        adapter.addMap(map);
         adapter.addHeader(getString(R.string.wifi_dhcp));
-        adapter.addMap(Utils.findProperties(dhcpInfo));
-        int i = 1;
+        map = Utils.findFields(dhcpInfo);
+        updateIp(map, "dns1");
+        updateIp(map, "dns2");
+        updateIp(map, "gateway");
+        updateIp(map, "ipAddress");
+        updateIp(map, "netmask");
+        updateIp(map, "serverAddress");
+        adapter.addMap(map);
         if (configuredNetworks != null) {
-            for(Object wifiConfiguration : configuredNetworks) {
-                adapter.addHeader(getString(R.string.wifi_configuration, i++));
-                map = Utils.findProperties(wifiConfiguration);
-                map.putAll(Utils.findFields(wifiConfiguration));
-                adapter.addMap(map);
-            }
-            i = 1;
+            adapter.addButton(getString(R.string.activity_wifi_configuration), new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(getContext(), WifiConfigurationActivity.class));
+                }
+            });
         }
         if (scanResults != null) {
-            for(Object scanResult : scanResults) {
-                adapter.addHeader(getString(R.string.wifi_scan, i++));
-                adapter.addMap(Utils.findProperties(scanResult));
-            }
+            adapter.addButton(getString(R.string.activity_wifi_scan), new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(getContext(), WifiScanResultActivity.class));
+                }
+            });
         }
-        wifiManager.getConnectionInfo();
+        adapter.addHeader(getString(R.string.wifi_static));
+        adapter.addMap(wifiManagerMap);
         recyclerView.setAdapter(adapter);
         return recyclerView;
+    }
+
+    private void updateIp(Map<String, Object> map, String key) {
+        int ip = (int) map.get(key);
+        String addr = String.format("%d.%d.%d.%d", 0xff & ip, 0xff & (ip >> 8), 0xff & (ip >> 16), 0xff & (ip >> 24));
+        map.put(key, addr);
     }
 
 }
