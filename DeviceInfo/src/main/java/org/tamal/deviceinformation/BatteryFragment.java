@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class BatteryFragment extends Fragment {
@@ -32,7 +33,7 @@ public class BatteryFragment extends Fragment {
     }
 
     private Map<String, Object> addBatteryDetails(Intent batteryStatus) {
-        Map<String, Object> map = new ArrayMap<>();
+        Map<String, Object> map = new HashMap<>();
         map.put(getString(R.string.battery_present), batteryStatus.getBooleanExtra(BatteryManager.EXTRA_PRESENT, false));
 
         int key = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);

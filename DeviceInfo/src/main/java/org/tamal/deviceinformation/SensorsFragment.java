@@ -97,8 +97,10 @@ public class SensorsFragment extends Fragment implements SensorEventListener {
                 value = getString(R.string.sensor_values_xyz_unit, v[0], v[1], v[2], unit);
                 break;
             case Sensor.TYPE_GYROSCOPE:
-            case Sensor.TYPE_GYROSCOPE_UNCALIBRATED:
                 value = getString(R.string.sensor_values_xyz_unit, v[0], v[1], v[2], unit);
+                break;
+            case Sensor.TYPE_GYROSCOPE_UNCALIBRATED:
+                value = getString(R.string.sensor_values_gyroscope_uncalibrated, v[0], v[1], v[2], v[3], v[4], v[5]);
                 break;
             case Sensor.TYPE_ORIENTATION:
                 value = getString(R.string.sensor_values_xyz_unit, v[2], v[0], v[1], unit);
@@ -115,6 +117,13 @@ public class SensorsFragment extends Fragment implements SensorEventListener {
             case Sensor.TYPE_LIGHT:
                 value = getString(R.string.sensor_value_unit, event.values[0], unit);
                 value += " (" + findNearest(LIGHT, event.values[0]) + ")";
+                break;
+            case Sensor.TYPE_SIGNIFICANT_MOTION:
+            case Sensor.TYPE_STEP_DETECTOR:
+                value = getString(R.string.sensor_values_no_value, System.currentTimeMillis());
+                break;
+            case Sensor.TYPE_STEP_COUNTER:
+                value = getString(R.string.sensor_value_unit, event.values[0], unit);
                 break;
             default:
                 value = Arrays.toString(v);
@@ -150,6 +159,11 @@ public class SensorsFragment extends Fragment implements SensorEventListener {
                 return getString(R.string.sensor_unit_pascal);
             case Sensor.TYPE_RELATIVE_HUMIDITY:
                 return getString(R.string.sensor_unit_percent);
+            case Sensor.TYPE_STEP_COUNTER:
+                return getString(R.string.sensor_unit_step);
+            case Sensor.TYPE_TEMPERATURE:
+            case Sensor.TYPE_AMBIENT_TEMPERATURE:
+                return getString(R.string.sensor_unit_centigrade);
         }
         return "";
     }
@@ -235,7 +249,7 @@ public class SensorsFragment extends Fragment implements SensorEventListener {
                 viewGroup.findViewById(R.id.sensor_dynamic_label).setVisibility(View.GONE);
             }
             view = (TextView) viewGroup.findViewById(R.id.sensor_wake_up);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 view.setText(String.valueOf(sensor.isWakeUpSensor()));
             } else {
                 view.setVisibility(View.GONE);
@@ -248,8 +262,11 @@ public class SensorsFragment extends Fragment implements SensorEventListener {
                 view.setVisibility(View.GONE);
                 viewGroup.findViewById(R.id.sensor_additional_info_label).setVisibility(View.GONE);
             }
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setTitle(sensor.getName()).setView(viewGroup).show();
+            new AlertDialog.Builder(getContext())
+                    .setTitle(sensor.getName())
+                    .setView(viewGroup)
+                    .setPositiveButton(R.string.ok, null)
+                    .show();
         }
     }
 }

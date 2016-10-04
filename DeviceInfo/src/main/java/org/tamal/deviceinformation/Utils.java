@@ -85,7 +85,20 @@ final class Utils {
     }
 
     static Map<String, Object> findProperties(Object object) {
+        return findProperties(object, null);
+    }
+
+    static Map<String, Object> findProperties(Object object, @Nullable String regex) {
         Map<String, Object> map = new TreeMap<>();
+        if (object == null) {
+            return map;
+        }
+        Pattern pattern;
+        if (regex == null) {
+            pattern = Pattern.compile("(?:is|get)(.*)");
+        } else {
+            pattern = Pattern.compile(regex);
+        }
         for (Method method : object.getClass().getMethods()) {
             boolean isPublic = Modifier.isPublic(method.getModifiers());
             boolean isStatic = Modifier.isStatic(method.getModifiers());
@@ -94,12 +107,12 @@ final class Utils {
                 continue;
             }
             String name = method.getName();
-            if (name.startsWith("is")) {
-                name = name.substring(2);
-            } else if (name.startsWith("get")) {
-                name = name.substring(3);
-            } else {
+            Matcher matcher = pattern.matcher(name);
+            if (!matcher.find()) {
                 continue;
+            }
+            if (matcher.groupCount() == 1) {
+                name = matcher.group(1);
             }
             try {
                 Object value = method.invoke(object);
@@ -115,6 +128,9 @@ final class Utils {
 
     static Map<String, Object> findFields(Object object) {
         Map<String, Object> map = new TreeMap<>();
+        if (object == null) {
+            return map;
+        }
         for (Field field : object.getClass().getFields()) {
             boolean isPublic = Modifier.isPublic(field.getModifiers());
             boolean isStatic = Modifier.isStatic(field.getModifiers());

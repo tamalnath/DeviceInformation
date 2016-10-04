@@ -4,7 +4,8 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <application
         android:allowBackup="true"
@@ -20,8 +21,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".WifiConfigurationActivity" android:label="@string/activity_wifi_configuration" />
-        <activity android:name=".WifiScanResultActivity" android:label="@string/activity_wifi_scan" />
+        <activity android:name=".DelegatorActivity" android:label="@string/activity_delegator" />
         <activity android:name=".NetworksActivity" android:label="@string/activity_networks" />
     </application>
 
