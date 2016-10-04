@@ -45,7 +45,6 @@ public class BatteryFragment extends Fragment {
 
         value = getString(R.string.unknown);
         key = batteryStatus.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
-        value = Utils.findConstant(BatteryManager.class, key, "BATTERY_PLUGGED_(.*)");
         if (key > 0) {
             value = Utils.findConstant(BatteryManager.class, key, "BATTERY_PLUGGED_(.*)");
         } else if (key == 0) {

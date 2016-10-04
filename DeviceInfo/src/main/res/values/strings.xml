@@ -27,8 +27,13 @@
 
     <string name="fragment_network">Network</string>
     <string name="network_active">Active Network</string>
+    <string name="activity_networks">All Networks</string>
 
     <string name="fragment_telephony">Cellular Network</string>
+
+    <string name="fragment_resources">Resources</string>
+    <string name="resources_configuration">Configuration</string>
+    <string name="resources_display">Display Metrics</string>
 
     <string name="fragment_sensors">Sensors</string>
 

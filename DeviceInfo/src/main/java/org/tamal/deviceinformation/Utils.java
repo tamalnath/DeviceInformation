@@ -208,4 +208,27 @@ final class Utils {
         return String.valueOf(obj);
     }
 
+    static void expand(Map<String, Object> map, String key, Class<?> classType, String regex) {
+        Object value = map.get(key);
+        if (value == null) {
+            return;
+        }
+        if (value.getClass().isArray()) {
+            Map<String, ?> CONST = findConstants(classType, value.getClass().getComponentType(), regex);
+            int length = Array.getLength(value);
+            String[] array = new String[length];
+            for (int i = 0; i < length; i++) {
+                Object item = Array.get(value, i);
+                for (Map.Entry<String, ?> entry : CONST.entrySet()) {
+                    if (entry.getValue().equals(item)) {
+                        array[i] = entry.getKey();
+                        break;
+                    }
+                }
+            }
+            map.put(key, array);
+        } else {
+            map.put(key, findConstant(classType, value, regex));
+        }
+    }
 }

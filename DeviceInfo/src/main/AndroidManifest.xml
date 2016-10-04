@@ -22,6 +22,7 @@
         </activity>
         <activity android:name=".WifiConfigurationActivity" android:label="@string/activity_wifi_configuration" />
         <activity android:name=".WifiScanResultActivity" android:label="@string/activity_wifi_scan" />
+        <activity android:name=".NetworksActivity" android:label="@string/activity_networks" />
     </application>
 
 </manifest>

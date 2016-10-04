@@ -11,6 +11,7 @@ public class MainActivity extends BaseActivity {
 
     private Fragment[] fragments = {
             new GeneralFragment(),
+            new ResourceFragment(),
             new NetworkFragment(),
             new WifiFragment(),
             new TelephonyFragment(),
@@ -22,6 +23,7 @@ public class MainActivity extends BaseActivity {
 
     private int[] titles = {
             R.string.fragment_general,
+            R.string.fragment_resources,
             R.string.fragment_network,
             R.string.fragment_wifi,
             R.string.fragment_telephony,

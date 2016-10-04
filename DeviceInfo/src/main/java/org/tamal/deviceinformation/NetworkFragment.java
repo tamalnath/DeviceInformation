@@ -1,6 +1,7 @@
 package org.tamal.deviceinformation;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.LinkProperties;
 import android.net.Network;
@@ -20,9 +21,6 @@ import java.util.Map;
 
 public class NetworkFragment extends Fragment {
 
-    private static final Map<String, Integer> NETWORK_CAPABILITIES = Utils.findConstants(NetworkCapabilities.class, int.class, "NET_CAPABILITY_(.+)");
-    private static final Map<String, Integer> NETWORK_TRANSPORT = Utils.findConstants(NetworkCapabilities.class, int.class, "TRANSPORT_(.+)");
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         RecyclerView recyclerView = (RecyclerView) inflater.inflate(R.layout.recycler_view, container, false);
@@ -38,9 +36,11 @@ public class NetworkFragment extends Fragment {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 network = connectivityManager.getActiveNetwork();
             }
-            for (Network n : connectivityManager.getAllNetworks()) {
-                if (info.toString().equals(connectivityManager.getNetworkInfo(n).toString())) {
-                    network = n;
+            if (network == null) {
+                for (Network n : connectivityManager.getAllNetworks()) {
+                    if (info.toString().equals(connectivityManager.getNetworkInfo(n).toString())) {
+                        network = n;
+                    }
                 }
             }
             if (network != null) {
@@ -48,30 +48,18 @@ public class NetworkFragment extends Fragment {
                 adapter.addMap(Utils.findProperties(linkProperties));
                 NetworkCapabilities networkCapabilities = connectivityManager.getNetworkCapabilities(network);
                 Map<String, Object> map = Utils.findProperties(networkCapabilities);
-                expandArray(map, "Capabilities", NETWORK_CAPABILITIES);
-                expandArray(map, "TransportTypes", NETWORK_TRANSPORT);
+                Utils.expand(map, "Capabilities", NetworkCapabilities.class, "NET_CAPABILITY_(.+)");
+                Utils.expand(map, "TransportTypes", NetworkCapabilities.class, "TRANSPORT_(.+)");
                 adapter.addMap(map);
             }
+            adapter.addButton(getString(R.string.activity_networks), new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(getContext(), NetworksActivity.class));
+                }
+            });
         }
         recyclerView.setAdapter(adapter);
         return recyclerView;
-    }
-
-    private static void expandArray(Map<String, Object> map, String key, Map<String, Integer> lookupMap) {
-        Object object = map.get(key);
-        if (object.getClass().isArray()) {
-            int length = Array.getLength(object);
-            String[] array = new String[length];
-            for (int i = 0; i < length; i++) {
-                int item = Array.getInt(object, i);
-                for (Map.Entry<String, Integer> entry : lookupMap.entrySet()) {
-                    if (entry.getValue().equals(item)) {
-                        array[i] = entry.getKey();
-                        break;
-                    }
-                }
-            }
-            map.put(key, array);
-        }
     }
 }
