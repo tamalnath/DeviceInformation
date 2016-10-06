@@ -1,14 +1,7 @@
 package org.tamal.deviceinformation;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.LinkProperties;
-import android.net.Network;
-import android.net.NetworkCapabilities;
-import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,7 +10,7 @@ import android.view.ViewGroup;
 
 import java.util.Map;
 
-public class BuildFragment extends Fragment {
+public class BuildFragment extends BaseFragment {
 
     private static final Map<String, Object> BUILD = Utils.findConstants(Build.class, null, null);
 

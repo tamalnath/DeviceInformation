@@ -15,8 +15,8 @@ android {
         applicationId "org.tamal.deviceinformation"
         minSdkVersion 16
         targetSdkVersion 24
-        versionCode 4
-        versionName "1.1"
+        versionCode 6
+        versionName "1.2"
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
@@ -29,6 +29,7 @@ android {
             signingConfig signingConfigs.config
         }
     }
+    return void
 }
 
 dependencies {

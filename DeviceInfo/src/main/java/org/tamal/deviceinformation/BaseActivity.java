@@ -1,11 +1,8 @@
 package org.tamal.deviceinformation;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -15,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 abstract class BaseActivity extends AppCompatActivity {
 
@@ -26,21 +22,12 @@ abstract class BaseActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
     }
 
-    protected void onCreate(Bundle savedInstanceState, Fragment[] fragments, String[] titles) {
+    protected void onCreate(Bundle savedInstanceState, BaseFragment[] fragments) {
         onCreate(savedInstanceState, R.layout.activity_default);
         PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager());
         adapter.fragments = fragments;
-        adapter.titles = titles;
         ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setAdapter(adapter);
-    }
-
-    protected void onCreate(Bundle savedInstanceState, Fragment[] fragments, int[] titleIds) {
-        String[] titles = new String[titleIds.length];
-        for (int i = 0; i < titles.length; i++) {
-            titles[i] = getString(titleIds[i]);
-        }
-        onCreate(savedInstanceState, fragments, titles);
     }
 
     @Override
@@ -77,8 +64,7 @@ abstract class BaseActivity extends AppCompatActivity {
 
     private class PagerAdapter extends FragmentPagerAdapter {
 
-        Fragment[] fragments;
-        String[] titles;
+        BaseFragment[] fragments;
 
         PagerAdapter(FragmentManager fm) {
             super(fm);
@@ -96,8 +82,9 @@ abstract class BaseActivity extends AppCompatActivity {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return titles[position];
+            return fragments[position].getTitle();
         }
 
     }
+
 }

@@ -8,7 +8,6 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SensorsFragment extends Fragment implements SensorEventListener {
+public class SensorsFragment extends BaseFragment implements SensorEventListener {
 
     private static final int DELAY_MILLIS = 100;
     private static final Map<String, Float> GRAVITY = Utils.findConstants(SensorManager.class, float.class, "GRAVITY_(.+)");
@@ -32,6 +31,23 @@ public class SensorsFragment extends Fragment implements SensorEventListener {
     List<Sensor> sensors;
     Map<Sensor, Long> sensorUpdateMap = new HashMap<>();
     Map<Sensor, TextView> sensorValuesMap = new HashMap<>();
+
+    private static String findNearest(Map<String, Float> map, float value) {
+        float absValue = Math.abs(value);
+        String name = null;
+        float minDelta = Float.MAX_VALUE;
+        for (Map.Entry<String, Float> entry : map.entrySet()) {
+            float delta = Math.abs(entry.getValue() - absValue);
+            if (delta < minDelta) {
+                minDelta = delta;
+                name = entry.getKey();
+            }
+        }
+        if (name == null) {
+            return null;
+        }
+        return name;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -166,23 +182,6 @@ public class SensorsFragment extends Fragment implements SensorEventListener {
                 return getString(R.string.sensor_unit_centigrade);
         }
         return "";
-    }
-
-    private static String findNearest(Map<String, Float> map, float value) {
-        float absValue = Math.abs(value);
-        String name = null;
-        float minDelta = Float.MAX_VALUE;
-        for (Map.Entry<String, Float> entry : map.entrySet()) {
-            float delta = Math.abs(entry.getValue() - absValue);
-            if (delta < minDelta) {
-                minDelta = delta;
-                name = entry.getKey();
-            }
-        }
-        if (name == null) {
-            return null;
-        }
-        return name;
     }
 
     private class SensorDetailsClickListener implements View.OnClickListener {

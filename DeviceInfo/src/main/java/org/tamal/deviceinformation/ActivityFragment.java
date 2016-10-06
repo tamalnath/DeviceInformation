@@ -1,17 +1,18 @@
 package org.tamal.deviceinformation;
 
-import android.graphics.Typeface;
+import android.app.ActivityManager;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import java.io.File;
+import java.util.Map;
 
-public class FontsFragment extends BaseFragment {
+import static android.content.Context.ACTIVITY_SERVICE;
+
+public class ActivityFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -19,18 +20,9 @@ public class FontsFragment extends BaseFragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         Adapter adapter = new Adapter();
-        for (final File fontFile : new File("/system/fonts").listFiles()) {
-            String fontName = fontFile.getName().split("\\.")[0];
-            adapter.addHeader(fontName, new Adapter.Data() {
-
-                @Override
-                public void decorate(RecyclerView.ViewHolder holder, int position) {
-                    Typeface typeface = Typeface.createFromFile(fontFile);
-                    ((TextView) holder.itemView).setTextSize(16);
-                    ((TextView) holder.itemView).setTypeface(typeface);
-                }
-            });
-        }
+        ActivityManager activityManager = (ActivityManager) getContext().getSystemService(ACTIVITY_SERVICE);
+        Map<String, Object> map = Utils.findProperties(activityManager);
+        adapter.addMap(map);
         recyclerView.setAdapter(adapter);
         return recyclerView;
     }

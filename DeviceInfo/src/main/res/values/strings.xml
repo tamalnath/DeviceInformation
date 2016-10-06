@@ -95,5 +95,6 @@
     <string name="telephony_neighboring_cell_info">Neighboring Cell Info</string>
 
     <string name="fragment_location">Location</string>
+    <string name="fragment_activity">Activity</string>
 
 </resources>

@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.BatteryManager;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,7 +13,7 @@ import android.view.ViewGroup;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BatteryFragment extends Fragment {
+public class BatteryFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

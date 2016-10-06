@@ -9,7 +9,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
@@ -22,6 +21,7 @@ final class Utils {
     private Utils() {
     }
 
+    @SuppressWarnings("unchecked")
     static <T> Map<String, T> findConstants(Class<?> classType, @Nullable Class<T> fieldType, @Nullable String regex) {
         Map<String, T> map = new TreeMap<>();
         Pattern pattern = regex == null ? null : Pattern.compile(regex);
@@ -85,20 +85,16 @@ final class Utils {
     }
 
     static Map<String, Object> findProperties(Object object) {
-        return findProperties(object, null);
+        return findProperties(object, "(?:is|get)(.*)");
     }
 
-    static Map<String, Object> findProperties(Object object, @Nullable String regex) {
+    static Map<String, Object> findProperties(Object object, String regex) {
         Map<String, Object> map = new TreeMap<>();
         if (object == null) {
             return map;
         }
         Pattern pattern;
-        if (regex == null) {
-            pattern = Pattern.compile("(?:is|get)(.*)");
-        } else {
-            pattern = Pattern.compile(regex);
-        }
+        pattern = Pattern.compile(regex);
         for (Method method : object.getClass().getMethods()) {
             boolean isPublic = Modifier.isPublic(method.getModifiers());
             boolean isStatic = Modifier.isStatic(method.getModifiers());

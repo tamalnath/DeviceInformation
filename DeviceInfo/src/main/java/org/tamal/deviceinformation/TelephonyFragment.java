@@ -3,20 +3,22 @@ package org.tamal.deviceinformation;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.telephony.CellInfo;
+import android.telephony.NeighboringCellInfo;
 import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Map;
 
-public class TelephonyFragment extends Fragment {
+public class TelephonyFragment extends BaseFragment {
 
     @Override
+    @SuppressWarnings("unchecked")
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         RecyclerView recyclerView = (RecyclerView) inflater.inflate(R.layout.recycler_view, container, false);
         recyclerView.setHasFixedSize(true);
@@ -24,22 +26,26 @@ public class TelephonyFragment extends Fragment {
         Adapter adapter = new Adapter();
         TelephonyManager telephonyManager = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
         Map<String, Object> map = Utils.findProperties(telephonyManager);
-        if (map.remove("AllCellInfo") != null) {
+        final ArrayList<CellInfo> cellInfos = (ArrayList<CellInfo>) map.remove("AllCellInfo");
+        if (cellInfos != null) {
             adapter.addButton(getString(R.string.telephony_all_cell_info), new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(getContext(), DelegatorActivity.class);
-                    intent.putExtra(DelegatorActivity.ID, DelegatorActivity.TELEPHONY_ALL_CELL_INFO);
+                    intent.putExtra(DelegatorActivity.ACTIVITY_TITLE_ID, R.string.telephony_all_cell_info);
+                    intent.putParcelableArrayListExtra(DelegatorActivity.PARCELABLES, cellInfos);
                     startActivity(intent);
                 }
             });
         }
-        if (map.remove("NeighboringCellInfo") != null) {
+        final ArrayList<NeighboringCellInfo> neighboringCellInfos = (ArrayList<NeighboringCellInfo>) map.remove("NeighboringCellInfo");
+        if (neighboringCellInfos != null) {
             adapter.addButton(getString(R.string.telephony_neighboring_cell_info), new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(getContext(), DelegatorActivity.class);
-                    intent.putExtra(DelegatorActivity.ID, DelegatorActivity.TELEPHONY_NEIGHBORING_CELL_INFO);
+                    intent.putExtra(DelegatorActivity.ACTIVITY_TITLE_ID, R.string.telephony_neighboring_cell_info);
+                    intent.putParcelableArrayListExtra(DelegatorActivity.PARCELABLES, neighboringCellInfos);
                     startActivity(intent);
                 }
             });
