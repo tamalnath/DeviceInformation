@@ -3,7 +3,7 @@
     <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
     </style>
 
-    <style name="Heading" parent="TextAppearance.AppCompat.Display1">
+    <style name="Heading" parent="TextAppearance.AppCompat.Title">
     </style>
 
 </resources>

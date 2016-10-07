@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -34,17 +33,11 @@ abstract class BaseActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
         MenuItem item = null;
-        int iconId = -1;
         if (this instanceof MainActivity) {
             item = menu.findItem(R.id.action_main);
-            iconId = R.drawable.ic_home;
         }
         if (item != null) {
             item.setVisible(false);
-        }
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null && iconId != -1) {
-            actionBar.setIcon(iconId);
         }
         return true;
     }

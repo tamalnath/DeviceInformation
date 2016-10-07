@@ -264,7 +264,7 @@ public class SensorsFragment extends BaseFragment implements SensorEventListener
             new AlertDialog.Builder(getContext())
                     .setTitle(sensor.getName())
                     .setView(viewGroup)
-                    .setPositiveButton(R.string.ok, null)
+                    .setPositiveButton(R.string.dismiss, null)
                     .show();
         }
     }

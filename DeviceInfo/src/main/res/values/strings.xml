@@ -8,7 +8,7 @@
         tamal.nath@gmail.com.</string>
     <string name="unknown">Unknown</string>
     <string name="loading">Loading&#8230;</string>
-    <string name="ok">OK</string>
+    <string name="dismiss">Dismiss</string>
     <string name="access_denied">Access %1$s is denied.</string>
 
     <string name="activity_main">Home</string>
@@ -96,5 +96,10 @@
 
     <string name="fragment_location">Location</string>
     <string name="fragment_activity">Activity</string>
+    <string name="recent_tasks">Recent Tasks</string>
+    <string name="running_tasks">Running Tasks</string>
+    <string name="running_process">Running Process</string>
+    <string name="process_error_state">Process Error State</string>
+    <string name="running_services">Running Services</string>
 
 </resources>

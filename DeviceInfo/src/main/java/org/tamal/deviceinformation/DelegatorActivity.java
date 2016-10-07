@@ -1,10 +1,12 @@
 package org.tamal.deviceinformation;
 
+import android.app.ActivityManager;
 import android.content.Intent;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.telephony.CellInfo;
@@ -37,6 +39,10 @@ public class DelegatorActivity extends BaseActivity {
             fragments[i] = delegatorFragment;
         }
         super.onCreate(savedInstanceState, fragments);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     public static class DelegatorFragment extends BaseFragment {
@@ -80,6 +86,16 @@ public class DelegatorActivity extends BaseActivity {
                     title = scanResult.BSSID;
                 }
                 return title;
+            } else if (parcelable instanceof ActivityManager.RecentTaskInfo) {
+                return String.valueOf(((ActivityManager.RecentTaskInfo) parcelable).id);
+            } else if (parcelable instanceof ActivityManager.RunningAppProcessInfo) {
+                return String.valueOf(((ActivityManager.RunningAppProcessInfo) parcelable).processName);
+            } else if (parcelable instanceof ActivityManager.ProcessErrorStateInfo) {
+                return String.valueOf(((ActivityManager.ProcessErrorStateInfo) parcelable).processName);
+            } else if (parcelable instanceof ActivityManager.RunningServiceInfo) {
+                return String.valueOf(((ActivityManager.RunningServiceInfo) parcelable).service.getShortClassName());
+            } else if (parcelable instanceof ActivityManager.RunningTaskInfo) {
+                return String.valueOf(((ActivityManager.RunningTaskInfo) parcelable).baseActivity.getShortClassName());
             } else {
                 return null;
             }
